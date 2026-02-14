@@ -21,10 +21,10 @@ const Footer = () => {
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="DoomScrollingFix on GitHub"
               className="text-gray-500 hover:text-white transition-colors"
             >
               <Github className="h-5 w-5" />
-              <span className="sr-only">GitHub</span>
             </a>
           </div>
         </div>
@@ -33,6 +33,9 @@ const Footer = () => {
           <p className="text-xs text-gray-600 text-center">
             &copy; {new Date().getFullYear()} DoomScrollingFix. Made by Leo
             Duarte.
+          </p>
+          <p className="sr-only">
+            DoomScrollingFix: how to stop doomscrolling, doom scrolling blocker, screen time reducer, digital wellbeing Chrome extension. Free doomscrolling fix for Twitter, Reddit, Instagram, TikTok, YouTube.
           </p>
         </div>
       </div>

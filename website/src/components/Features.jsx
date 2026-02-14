@@ -49,10 +49,10 @@ const Features = () => {
   };
 
   return (
-    <section id="features" className="py-20 bg-[#0F0F0F]">
+    <section id="features" aria-labelledby="features-heading" className="py-20 bg-[#0F0F0F]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+          <h2 id="features-heading" className="text-3xl md:text-4xl font-bold mb-4 text-white">
             What you actually get
           </h2>
           <p className="text-lg text-gray-400">

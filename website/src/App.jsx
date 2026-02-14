@@ -11,7 +11,6 @@ import ScrollIndicator from "@/components/ScrollIndicator";
 
 function App() {
   useEffect(() => {
-    document.title = "DoomScrollingFix — Stop Doomscrolling, Start Choosing";
     if (!document.documentElement.classList.contains('dark')) {
         document.documentElement.classList.add('dark');
     }

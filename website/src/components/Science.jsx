@@ -31,10 +31,10 @@ const studies = [
 
 const Science = () => {
   return (
-    <section id="science" className="py-20 bg-[#0F0F0F]">
+    <section id="science" aria-labelledby="science-heading" className="py-20 bg-[#0F0F0F]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+          <h2 id="science-heading" className="text-3xl md:text-4xl font-bold mb-4 text-white">
             Built on research, not hype
           </h2>
           <p className="text-lg text-gray-400">
@@ -55,12 +55,12 @@ const Science = () => {
             >
               <div className="flex-shrink-0 mt-1">{study.icon}</div>
               <div>
-                <div className="flex items-baseline gap-3 mb-2">
+                <h3 className="flex items-baseline gap-3 mb-2">
                   <span className="text-2xl font-bold text-white">
                     {study.stat}
                   </span>
                   <span className="text-sm text-gray-500">{study.label}</span>
-                </div>
+                </h3>
                 <p className="text-gray-400 mb-2">{study.description}</p>
                 <p className="text-xs text-gray-600">{study.source}</p>
               </div>

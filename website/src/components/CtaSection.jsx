@@ -5,7 +5,7 @@ import { Chrome } from "lucide-react";
 
 const CtaSection = () => {
   return (
-    <section className="py-20 bg-background">
+    <section aria-labelledby="cta-heading" className="py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="relative rounded-2xl overflow-hidden"
@@ -18,11 +18,11 @@ const CtaSection = () => {
           <div className="absolute inset-0 bg-black opacity-30"></div>
           <div className="relative z-10 py-16 px-8 md:py-24 md:px-16">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Take back your attention
+              <h2 id="cta-heading" className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Stop doomscrolling today
               </h2>
               <p className="text-lg text-gray-300 mb-8">
-                No account. No tracking. Just better habits.
+                Take back your attention. No account. No tracking. Just better habits.
               </p>
               <Button className="bg-white text-black hover:bg-gray-200 px-8 py-6 h-auto text-lg font-semibold">
                 <Chrome className="mr-2 h-5 w-5" />

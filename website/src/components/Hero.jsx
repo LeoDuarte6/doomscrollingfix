@@ -5,7 +5,7 @@ import { ArrowRight, Chrome } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative pt-24 pb-20 md:pt-36 md:pb-28 overflow-hidden hero-gradient">
+    <section aria-labelledby="hero-heading" className="relative pt-24 pb-20 md:pt-36 md:pb-28 overflow-hidden hero-gradient">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center">
           <motion.div
@@ -14,7 +14,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white">
+            <h1 id="hero-heading" className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white">
               Stop doomscrolling.{" "}
               <span className="gradient-text">Start choosing.</span>
             </h1>
@@ -42,6 +42,9 @@ const Hero = () => {
             </div>
             <p className="mt-6 text-sm text-gray-500">
               No account required. No data collection. Works instantly.
+            </p>
+            <p className="sr-only">
+              DoomScrollingFix is a free Chrome extension to stop doomscrolling on Twitter, Reddit, Instagram, TikTok, YouTube, and Facebook. Break the doom scrolling habit with research-backed friction.
             </p>
           </motion.div>
           <motion.div

@@ -31,10 +31,10 @@ const steps = [
 
 const HowItWorks = () => {
   return (
-    <section id="how-it-works" className="py-20 bg-background">
+    <section id="how-it-works" aria-labelledby="how-it-works-heading" className="py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+          <h2 id="how-it-works-heading" className="text-3xl md:text-4xl font-bold mb-4 text-white">
             How it works
           </h2>
           <p className="text-lg text-gray-400">
