@@ -31,8 +31,16 @@ const Footer = () => {
 
         <div className="border-t border-white/[0.06] pt-6">
           <p className="text-xs text-gray-600 text-center">
-            &copy; {new Date().getFullYear()} DoomScrollingFix. Made by Leo
-            Duarte.
+            &copy; {new Date().getFullYear()} DoomScrollingFix. Created by{" "}
+            <a
+              href="https://buffalowebproducts.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-white transition-colors"
+            >
+              Buffalo WebProducts
+            </a>
+            .
           </p>
           <p className="sr-only">
             DoomScrollingFix: how to stop doomscrolling, doom scrolling blocker, screen time reducer, digital wellbeing Chrome extension. Free doomscrolling fix for Twitter, Reddit, Instagram, TikTok, YouTube.
