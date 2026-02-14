@@ -60,6 +60,23 @@ class DoomScrollState {
     }
   }
 
+  pauseTimer() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  }
+
+  resumeTimer() {
+    if (this.isUnlocked && !this.timerInterval) {
+      this.timerInterval = setInterval(() => {
+        this.timeSpent++;
+        this.updateTimerDisplay();
+        this.saveTimeSpent();
+      }, 1000);
+    }
+  }
+
   async saveTimeSpent() {
     try {
       const key = `timeSpent_${this.currentDomain}`;
@@ -176,6 +193,8 @@ class DoomScrollController {
 
       window.addEventListener('scroll', () => this.handleScroll());
       this.startRepromptCheck();
+
+      document.addEventListener('visibilitychange', () => this.handleVisibilityChange());
     } catch (error) {
       console.error('Initialization error:', error);
     }
@@ -286,6 +305,22 @@ class DoomScrollController {
     await chrome.storage.local.set({ interventionCount: interventionCount + 1 });
   }
 
+  async handleVisibilityChange() {
+    if (!this.state.isUnlocked) return;
+
+    if (document.hidden) {
+      this.state.pauseTimer();
+      if (this.repromptCheckInterval) {
+        clearInterval(this.repromptCheckInterval);
+        this.repromptCheckInterval = null;
+      }
+    } else {
+      this.state.resumeTimer();
+      await this.saveUnlockTime();
+      this.startRepromptCheck();
+    }
+  }
+
   handleScroll() {
     if (!this.state.isUnlocked) return;
 
@@ -342,6 +377,9 @@ class DoomScrollController {
 
 // Initialize
 function startController() {
+  // Skip sub-frames (e.g. YouTube's sandboxed about:blank iframes)
+  try { if (window !== window.top) return; } catch { return; }
+
   const controller = new DoomScrollController();
   controller.init().catch(console.error);
 }
