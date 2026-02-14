@@ -9,6 +9,9 @@ desktop.ini
 # Node
 node_modules/
 
+# Build output
+dist/
+
 # IDE
 .vscode/
 .idea/
