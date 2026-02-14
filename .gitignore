@@ -20,3 +20,6 @@ dist/
 
 # Logs
 *.log
+
+# Extension build artifact
+extension.zip
