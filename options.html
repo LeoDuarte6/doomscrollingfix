@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DoomScrollingFix Settings</title>
+  <link rel="stylesheet" href="src/css/options.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <img src="logo.png" alt="DoomScrollingFix Logo" class="logo">
+      <h1>DoomScrollingFix Settings</h1>
+    </header>
+
+    <main class="main-content">
+      <section class="settings-section" id="security-settings">
+        <h2>Security Settings</h2>
+        <form id="password-form" class="settings-form">
+          <div class="form-group">
+            <label for="current-password">Current Password</label>
+            <input type="password" id="current-password" required>
+          </div>
+          <div class="form-group">
+            <label for="new-password">New Password</label>
+            <input type="password" id="new-password" required>
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm New Password</label>
+            <input type="password" id="confirm-password" required>
+          </div>
+          <button type="submit" class="btn-primary">Update Password</button>
+        </form>
+      </section>
+
+      <section class="settings-section" id="website-settings">
+        <h2>Monitored Websites</h2>
+        <div class="website-list" id="website-list">
+          <!-- Dynamically populated -->
+        </div>
+        <form id="add-website-form" class="settings-form">
+          <div class="form-group">
+            <label for="new-website">Add Website</label>
+            <input type="text" id="new-website" placeholder="e.g., example.com">
+          </div>
+          <button type="submit" class="btn-primary">Add Website</button>
+        </form>
+      </section>
+
+      <section class="settings-section" id="timing-settings">
+        <h2>Timer Settings</h2>
+        <form id="timer-form" class="settings-form">
+          <div class="form-group">
+            <label for="reprompt-interval">Re-authentication Interval (minutes)</label>
+            <input type="number" id="reprompt-interval" min="1" max="60" value="2">
+          </div>
+          <button type="submit" class="btn-primary">Save Timer Settings</button>
+        </form>
+      </section>
+
+      <section class="settings-section" id="statistics">
+        <h2>Usage Statistics</h2>
+        <div class="stats-container">
+          <div class="stat-card">
+            <h3>Total Interventions</h3>
+            <p id="total-interventions">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Time Saved</h3>
+            <p id="time-saved">0 minutes</p>
+          </div>
+          <div class="stat-card">
+            <h3>Most Visited Site</h3>
+            <p id="most-visited">None</p>
+          </div>
+        </div>
+        <canvas id="usage-chart"></canvas>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>DoomScrollingFix v1.0.0</p>
+      <button id="reset-settings" class="btn-secondary">Reset All Settings</button>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+  
+  <script src="src/js/options.js" type="module"></script>
+</body>
+</html>

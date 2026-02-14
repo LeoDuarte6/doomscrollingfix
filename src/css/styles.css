@@ -1,0 +1,159 @@
+/* Variables */
+:root {
+  --ds-primary: #dc2626;
+  --ds-primary-dark: #991b1b;
+  --ds-text: hsl(0, 0%, 98%);
+  --ds-background: hsl(0, 0%, 9%);
+  --ds-border: hsl(0, 0%, 14.9%);
+  --ds-error: hsl(0, 84.2%, 60.2%);
+  --ds-overlay-bg: rgba(0, 0, 0, 0.95);
+  --ds-transition-speed: 0.3s;
+}
+
+/* Reset */
+.doomscroll-content-wrapper,
+.doomscroll-overlay,
+.doomscroll-input,
+.doomscroll-button,
+.doomscroll-timer {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Content Wrapper */
+.doomscroll-content-wrapper {
+  transition: filter var(--ds-transition-speed) ease-in-out;
+}
+
+.doomscroll-content-wrapper.doomscroll-blur {
+  filter: blur(10px);
+}
+
+/* Greyscale Effect */
+.doomscroll-greyscale {
+  filter: grayscale(100%) !important;
+  transition: filter var(--ds-transition-speed) ease-in-out;
+}
+
+/* Overlay */
+#doomscroll-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--ds-overlay-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2147483647;
+  transition: opacity var(--ds-transition-speed) ease-in-out;
+}
+
+/* Forms */
+.doomscroll-login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: var(--ds-background);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Inputs */
+.doomscroll-input {
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--ds-border);
+  background-color: var(--ds-background);
+  color: var(--ds-text);
+  font-size: 1rem;
+  width: 100%;
+  min-width: 250px;
+  outline: none;
+  transition: border-color var(--ds-transition-speed) ease-in-out;
+}
+
+.doomscroll-input:focus {
+  border-color: var(--ds-primary);
+}
+
+/* Buttons */
+.doomscroll-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  border: none;
+  background: linear-gradient(45deg, var(--ds-primary), var(--ds-primary-dark));
+  color: var(--ds-text);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform var(--ds-transition-speed) ease-in-out;
+}
+
+.doomscroll-button:hover {
+  transform: translateY(-1px);
+}
+
+.doomscroll-button:active {
+  transform: translateY(1px);
+}
+
+/* Text Elements */
+.doomscroll-text {
+  color: var(--ds-text);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.doomscroll-error {
+  color: var(--ds-error);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Timer */
+.doomscroll-timer {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: var(--ds-background);
+  color: var(--ds-text);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  z-index: 2147483646;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.doomscroll-fade-in {
+  animation: fadeIn var(--ds-transition-speed) ease-in-out;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .doomscroll-input,
+  .doomscroll-button {
+    min-width: 200px;
+  }
+
+  .doomscroll-text {
+    font-size: 1rem;
+  }
+
+  .doomscroll-timer {
+    font-size: 0.75rem;
+  }
+} 

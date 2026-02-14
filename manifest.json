@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "DoomScrollingFix",
+  "version": "1.0.0",
+  "description": "A mindful browsing extension that helps prevent doomscrolling through website fading and authentication",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "alarms",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*.twitter.com/*",
+    "*://*.x.com/*",
+    "*://*.facebook.com/*",
+    "*://*.instagram.com/*",
+    "*://*.reddit.com/*",
+    "*://*.tiktok.com/*",
+    "*://*.youtube.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.twitter.com/*",
+        "*://*.x.com/*",
+        "*://*.facebook.com/*",
+        "*://*.instagram.com/*",
+        "*://*.reddit.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.youtube.com/*"
+      ],
+      "js": ["src/js/content.js"],
+      "css": ["src/css/styles.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "options_page": "options.html",
+  "web_accessible_resources": [{
+    "resources": ["logo.png"],
+    "matches": ["<all_urls>"]
+  }],
+  "icons": {
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+  "action": {
+    "default_icon": "logo.png",
+    "default_title": "DoomScrollingFix"
+  },
+  "background": {
+    "service_worker": "src/js/background.js",
+    "type": "module"
+  },
+  "minimum_chrome_version": "88"
+}
