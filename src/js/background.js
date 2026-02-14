@@ -2,6 +2,10 @@
 const ALARM_NAME = 'checkDoomscrollStatus';
 const CHECK_INTERVAL = 1; // Check every minute
 
+function normalizeDomain(hostname) {
+  return hostname.replace(/^www\./, '');
+}
+
 /**
  * @typedef {import('./options').Settings} Settings
  */
@@ -74,10 +78,10 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
   try {
     if (changeInfo.status === 'complete' && tab.url) {
       const url = new URL(tab.url);
-      const domain = url.hostname;
+      const domain = normalizeDomain(url.hostname);
 
       const { doomscrollDomains = [] } = await chrome.storage.local.get('doomscrollDomains');
-      
+
       if (doomscrollDomains.some(d => domain.includes(d))) {
         await updateBadge(tabId);
       }
@@ -114,13 +118,13 @@ async function handleAlarm(alarm) {
 async function checkTab(tab) {
   try {
     const url = new URL(tab.url);
-    const domain = url.hostname;
+    const domain = normalizeDomain(url.hostname);
 
     const { doomscrollDomains = [] } = await chrome.storage.local.get('doomscrollDomains');
-    
+
     if (doomscrollDomains.some(d => domain.includes(d))) {
       await updateBadge(tab.id);
-      
+
       // Get time spent on this domain
       const key = `timeSpent_${domain}`;
       const { [key]: timeSpent = 0 } = await chrome.storage.local.get(key);

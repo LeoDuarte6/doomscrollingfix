@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background: 0 0% 7%;
+    --background: 0 0% 4%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 9%;
+    --card: 0 0% 7%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 9%;
+    --popover: 0 0% 7%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 72% 51%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 4%;
     --secondary: 0 0% 13%;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 13%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 0 72% 51%;
+    --accent: 0 84% 60%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
+    --border: 0 0% 100% / 0.06;
     --input: 0 0% 14.9%;
-    --ring: 0 72% 51%;
+    --ring: 0 0% 100%;
     --radius: 0.5rem;
   }
 }
@@ -45,11 +45,10 @@
   @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-red-400;
 }
 
-
 .hero-gradient {
-  background: radial-gradient(circle at top right, rgba(220, 38, 38, 0.15), transparent 40%),
-              radial-gradient(circle at bottom left, rgba(185, 28, 28, 0.15), transparent 40%),
-              #0a0a0a;
+  background: radial-gradient(circle at top right, rgba(220, 38, 38, 0.1), transparent 40%),
+              radial-gradient(circle at bottom left, rgba(185, 28, 28, 0.08), transparent 40%),
+              #09090b;
 }
 
 .card-hover {
@@ -58,7 +57,7 @@
 
 .card-hover:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.2), 0 8px 10px -6px rgba(220, 38, 38, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.05), 0 8px 10px -6px rgba(255, 255, 255, 0.03);
 }
 
 .scroll-indicator {
@@ -82,19 +81,21 @@
   text-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
 }
 
-.red-gradient-border {
-  position: relative;
+/* Hero breathing animation demo */
+.breathing-demo {
+  animation: breathe-demo 3s ease-in-out infinite;
 }
 
-.red-gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  background: linear-gradient(45deg, #dc2626, #991b1b);
-  border-radius: inherit;
-  z-index: -1;
+@keyframes breathe-demo {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.5); opacity: 1; }
 }
 
-.text-muted {
-  @apply text-muted-foreground;
+.demo-progress {
+  animation: progress-demo 6s linear infinite;
+}
+
+@keyframes progress-demo {
+  0% { width: 0%; }
+  100% { width: 100%; }
 }

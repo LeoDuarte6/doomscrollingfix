@@ -1,8 +1,9 @@
 // Constants
 const CONFIG = {
-  DEFAULT_REPROMPT_INTERVAL: 2 * 60 * 1000, // 2 minutes default
-  SCROLL_THRESHOLD: 100, // pixels scrolled before triggering reprompt check
-  REPROMPT_CHECK_INTERVAL: 5000, // check every 5 seconds
+  DEFAULT_REPROMPT_INTERVAL: 2 * 60 * 1000,
+  SCROLL_THRESHOLD: 100,
+  REPROMPT_CHECK_INTERVAL: 5000,
+  BREATHING_DURATION: 6000, // 6 seconds
   DEFAULT_DOMAINS: [
     'twitter.com',
     'x.com',
@@ -14,13 +15,18 @@ const CONFIG = {
   ]
 };
 
+// Normalize hostname — strip www. so keys always match domain list
+function normalizeDomain(hostname) {
+  return hostname.replace(/^www\./, '');
+}
+
 // State management
 class DoomScrollState {
   constructor() {
     this.isUnlocked = false;
     this.timeSpent = 0;
     this.timerInterval = null;
-    this.currentDomain = window.location.hostname;
+    this.currentDomain = normalizeDomain(window.location.hostname);
     this.lastScrollY = window.scrollY;
     this.scrollTimeout = null;
     this.repromptInterval = CONFIG.DEFAULT_REPROMPT_INTERVAL;
@@ -30,7 +36,7 @@ class DoomScrollState {
     try {
       const { repromptInterval } = await chrome.storage.local.get('repromptInterval');
       if (repromptInterval) {
-        this.repromptInterval = repromptInterval * 60 * 1000; // stored in minutes, convert to ms
+        this.repromptInterval = repromptInterval * 60 * 1000;
       }
     } catch (error) {
       console.error('Error loading reprompt interval:', error);
@@ -71,7 +77,8 @@ class DoomScrollState {
 
     const minutes = Math.floor(this.timeSpent / 60);
     const seconds = this.timeSpent % 60;
-    display.textContent = `Time spent: ${minutes}m ${seconds}s`;
+    const pad = (n) => String(n).padStart(2, '0');
+    display.textContent = `${pad(minutes)}:${pad(seconds)} on ${this.currentDomain}`;
   }
 }
 
@@ -82,7 +89,6 @@ class DoomScrollUI {
   }
 
   createOverlay() {
-    // Remove existing overlay if any
     const existing = document.getElementById('doomscroll-overlay');
     if (existing) existing.remove();
 
@@ -91,31 +97,47 @@ class DoomScrollUI {
     return overlay;
   }
 
-  createCaptcha() {
+  // Step 1: Breathing pause — intercepts System 1 behavior
+  createBreathingStep() {
     const container = document.createElement('div');
-    const nums = this.generateCaptchaNumbers();
+    container.className = 'doomscroll-card';
 
     container.innerHTML = `
-      <p class="doomscroll-text">Solve: ${nums.num1} + ${nums.num2} = ?</p>
-      <input type="text" class="doomscroll-input" placeholder="Enter answer">
-      <p class="doomscroll-error" style="display: none">Incorrect answer. Try again.</p>
-      <button class="doomscroll-button">Verify</button>
+      <div class="doomscroll-breathing-ring">
+        <div class="doomscroll-breathing-circle"></div>
+      </div>
+      <p class="doomscroll-heading">Take a moment</p>
+      <p class="doomscroll-subtext">Breathe in... and out.</p>
+      <div class="doomscroll-progress-bar">
+        <div class="doomscroll-progress-fill"></div>
+      </div>
     `;
 
-    return { container, answer: nums.num1 + nums.num2 };
+    return container;
   }
 
-  createLoginForm() {
-    const form = document.createElement('form');
-    form.classList.add('doomscroll-login-form');
+  // Step 2: Intention prompt — implementation intentions (d=0.65 effect size)
+  createIntentionStep() {
+    const container = document.createElement('div');
+    container.className = 'doomscroll-card';
 
-    form.innerHTML = `
-      <input type="password" class="doomscroll-input" placeholder="Enter password">
-      <button type="submit" class="doomscroll-button">Submit</button>
-      <p class="doomscroll-error" style="display: none">Incorrect password. Try again.</p>
+    container.innerHTML = `
+      <div class="doomscroll-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <p class="doomscroll-heading">What are you looking for?</p>
+      <p class="doomscroll-subtext">Be specific. If you can't name it, you probably don't need it.</p>
+      <input type="text" class="doomscroll-input" placeholder="e.g. Check a DM, find a recipe..." autocomplete="off">
+      <div class="doomscroll-choice-row">
+        <button class="doomscroll-button doomscroll-button-dismiss">Go back</button>
+        <button class="doomscroll-button doomscroll-button-proceed">Continue to ${this.state.currentDomain}</button>
+      </div>
     `;
 
-    return form;
+    return container;
   }
 
   ensureTimerDisplay() {
@@ -127,13 +149,6 @@ class DoomScrollUI {
       document.body.appendChild(display);
     }
     return display;
-  }
-
-  generateCaptchaNumbers() {
-    return {
-      num1: Math.floor(Math.random() * 10) + 1,
-      num2: Math.floor(Math.random() * 10) + 1
-    };
   }
 }
 
@@ -159,10 +174,7 @@ class DoomScrollController {
         this.unlockContent();
       }
 
-      // Set up scroll listener for reprompting
       window.addEventListener('scroll', () => this.handleScroll());
-
-      // Set up periodic reprompt check
       this.startRepromptCheck();
     } catch (error) {
       console.error('Initialization error:', error);
@@ -183,78 +195,58 @@ class DoomScrollController {
 
   setupOverlay() {
     const overlay = this.ui.createOverlay();
-    const { container: captcha, answer: captchaAnswer } = this.ui.createCaptcha();
-    const loginForm = this.ui.createLoginForm();
+    const breathingStep = this.ui.createBreathingStep();
+    const intentionStep = this.ui.createIntentionStep();
 
-    loginForm.style.display = 'none';
-    overlay.appendChild(captcha);
-    overlay.appendChild(loginForm);
+    intentionStep.style.display = 'none';
+    overlay.appendChild(breathingStep);
+    overlay.appendChild(intentionStep);
 
-    this.setupEventListeners(captcha, captchaAnswer, loginForm);
     this.wrapAndBlurContent();
     document.body.appendChild(overlay);
-
     requestAnimationFrame(() => overlay.style.opacity = '1');
-  }
 
-  setupEventListeners(captcha, captchaAnswer, loginForm) {
-    const verifyButton = captcha.querySelector('.doomscroll-button');
-    const captchaInput = captcha.querySelector('.doomscroll-input');
-
-    captchaInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        verifyButton.click();
-      }
+    // Start breathing animation, then transition to intention step
+    const progressFill = breathingStep.querySelector('.doomscroll-progress-fill');
+    progressFill.style.transition = `width ${CONFIG.BREATHING_DURATION}ms linear`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        progressFill.style.width = '100%';
+      });
     });
 
-    verifyButton.addEventListener('click', () => this.handleCaptchaVerification(captcha, captchaAnswer, loginForm));
+    setTimeout(() => {
+      breathingStep.style.display = 'none';
+      intentionStep.style.display = 'flex';
 
-    loginForm.addEventListener('submit', (e) => this.handleLoginSubmit(e, loginForm));
+      // Set up intention step listeners
+      const dismissBtn = intentionStep.querySelector('.doomscroll-button-dismiss');
+      const proceedBtn = intentionStep.querySelector('.doomscroll-button-proceed');
+      const input = intentionStep.querySelector('.doomscroll-input');
 
-    const loginInput = loginForm.querySelector('.doomscroll-input');
-    loginInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        loginForm.dispatchEvent(new Event('submit'));
-      }
-    });
-  }
+      dismissBtn.addEventListener('click', () => {
+        // Go back — close the tab or navigate away
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.close();
+        }
+      });
 
-  async handleCaptchaVerification(captcha, captchaAnswer, loginForm) {
-    const input = captcha.querySelector('.doomscroll-input');
-    const error = captcha.querySelector('.doomscroll-error');
-    const userAnswer = parseInt(input.value, 10);
-
-    if (userAnswer === captchaAnswer) {
-      captcha.style.display = 'none';
-      loginForm.style.display = 'flex';
-      loginForm.querySelector('.doomscroll-input').focus();
-    } else {
-      error.style.display = 'block';
-      input.value = '';
-      input.focus();
-    }
-  }
-
-  async handleLoginSubmit(e, loginForm) {
-    e.preventDefault();
-    const input = loginForm.querySelector('.doomscroll-input');
-    const error = loginForm.querySelector('.doomscroll-error');
-
-    try {
-      const { password } = await chrome.storage.local.get('password');
-      if (input.value === password) {
+      proceedBtn.addEventListener('click', async () => {
         this.unlockContent();
         await this.saveUnlockTime();
-      } else {
-        error.style.display = 'block';
-        input.value = '';
-        input.focus();
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-    }
+      });
+
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          proceedBtn.click();
+        }
+      });
+
+      setTimeout(() => input.focus(), 100);
+    }, CONFIG.BREATHING_DURATION);
   }
 
   wrapAndBlurContent() {
@@ -283,8 +275,6 @@ class DoomScrollController {
 
     this.state.isUnlocked = true;
     this.state.startTimer();
-
-    // Ensure only one timer display exists (don't re-append on every unlock)
     this.ui.ensureTimerDisplay();
   }
 
@@ -296,7 +286,6 @@ class DoomScrollController {
     await chrome.storage.local.set({ interventionCount: interventionCount + 1 });
   }
 
-  // Scroll-triggered reprompting (ported from root content.js)
   handleScroll() {
     if (!this.state.isUnlocked) return;
 
@@ -325,7 +314,6 @@ class DoomScrollController {
     this.state.lastScrollY = currentScrollY;
   }
 
-  // Periodic timer-based reprompting (ported from root content.js)
   startRepromptCheck() {
     if (this.repromptCheckInterval) return;
 
@@ -346,14 +334,13 @@ class DoomScrollController {
   }
 
   triggerReprompt(source) {
-    console.log(`${source}-triggered reprompt`);
     this.state.isUnlocked = false;
     this.state.stopTimer();
     this.setupOverlay();
   }
 }
 
-// Initialize: support both document_start (immediate) and DOMContentLoaded
+// Initialize
 function startController() {
   const controller = new DoomScrollController();
   controller.init().catch(console.error);

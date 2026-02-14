@@ -3,89 +3,204 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DoomScrollingFix Settings</title>
+  <title>DoomScrollingFix</title>
   <link rel="stylesheet" href="src/css/options.css">
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <img src="logo.png" alt="DoomScrollingFix Logo" class="logo">
-      <h1>DoomScrollingFix Settings</h1>
-    </header>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="icons/icon-128.png" alt="DoomScrollingFix" class="sidebar-logo">
+        <span class="sidebar-brand">DoomScrollingFix</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+          </svg>
+          Dashboard
+        </a>
+        <a href="#" class="nav-item" data-section="websites">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          Websites
+        </a>
+        <a href="#" class="nav-item" data-section="timer">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Timer
+        </a>
+        <a href="#" class="nav-item" data-section="password">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Password
+        </a>
+        <a href="#" class="nav-item" data-section="account">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Account
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="version">v1.0.0</span>
+      </div>
+    </aside>
 
+    <!-- Main content -->
     <main class="main-content">
-      <section class="settings-section" id="security-settings">
-        <h2>Security Settings</h2>
-        <form id="password-form" class="settings-form">
-          <div class="form-group">
-            <label for="current-password">Current Password</label>
-            <input type="password" id="current-password" required>
-          </div>
-          <div class="form-group">
-            <label for="new-password">New Password</label>
-            <input type="password" id="new-password" required>
-          </div>
-          <div class="form-group">
-            <label for="confirm-password">Confirm New Password</label>
-            <input type="password" id="confirm-password" required>
-          </div>
-          <button type="submit" class="btn-primary">Update Password</button>
-        </form>
-      </section>
+      <!-- Dashboard Section -->
+      <section class="section active" id="section-dashboard">
+        <h2 class="section-title">Dashboard</h2>
 
-      <section class="settings-section" id="website-settings">
-        <h2>Monitored Websites</h2>
-        <div class="website-list" id="website-list">
-          <!-- Dynamically populated -->
-        </div>
-        <form id="add-website-form" class="settings-form">
-          <div class="form-group">
-            <label for="new-website">Add Website</label>
-            <input type="text" id="new-website" placeholder="e.g., example.com">
-          </div>
-          <button type="submit" class="btn-primary">Add Website</button>
-        </form>
-      </section>
-
-      <section class="settings-section" id="timing-settings">
-        <h2>Timer Settings</h2>
-        <form id="timer-form" class="settings-form">
-          <div class="form-group">
-            <label for="reprompt-interval">Re-authentication Interval (minutes)</label>
-            <input type="number" id="reprompt-interval" min="1" max="60" value="2">
-          </div>
-          <button type="submit" class="btn-primary">Save Timer Settings</button>
-        </form>
-      </section>
-
-      <section class="settings-section" id="statistics">
-        <h2>Usage Statistics</h2>
-        <div class="stats-container">
+        <div class="stats-grid">
           <div class="stat-card">
-            <h3>Total Interventions</h3>
-            <p id="total-interventions">0</p>
+            <p class="stat-label">Interventions</p>
+            <p class="stat-value" id="total-interventions">0</p>
           </div>
           <div class="stat-card">
-            <h3>Time Saved</h3>
-            <p id="time-saved">0 minutes</p>
+            <p class="stat-label">Time saved</p>
+            <p class="stat-value" id="time-saved">0m</p>
           </div>
           <div class="stat-card">
-            <h3>Most Visited Site</h3>
-            <p id="most-visited">None</p>
+            <p class="stat-label">Top site</p>
+            <p class="stat-value stat-value-sm" id="most-visited">--</p>
           </div>
         </div>
-        <canvas id="usage-chart"></canvas>
+
+        <div class="card">
+          <h3 class="card-title">Time per site</h3>
+          <div id="bar-chart" class="bar-chart"></div>
+        </div>
       </section>
+
+      <!-- Websites Section -->
+      <section class="section" id="section-websites">
+        <h2 class="section-title">Monitored websites</h2>
+        <p class="section-desc">Sites where the intervention will appear. Add any domain you want to monitor.</p>
+
+        <div class="card">
+          <div class="website-list" id="website-list"></div>
+          <form id="add-website-form" class="add-website-form">
+            <input type="text" id="new-website" placeholder="e.g. threads.net">
+            <button type="submit" class="btn-primary">Add</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Timer Section -->
+      <section class="section" id="section-timer">
+        <h2 class="section-title">Timer</h2>
+        <p class="section-desc">How long before the intervention re-appears after you continue browsing.</p>
+
+        <div class="card">
+          <form id="timer-form">
+            <div class="form-group">
+              <label for="reprompt-interval">Re-prompt interval</label>
+              <div class="input-with-suffix">
+                <input type="number" id="reprompt-interval" min="1" max="60" value="2">
+                <span class="input-suffix">min</span>
+              </div>
+              <p class="form-hint">After this many minutes, you'll see the breathing exercise again.</p>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Password Section -->
+      <section class="section" id="section-password">
+        <h2 class="section-title">Password</h2>
+        <p class="section-desc">Optional. Set a password to add an extra layer of friction before unlocking sites.</p>
+
+        <div class="card">
+          <form id="password-form">
+            <div class="form-group">
+              <label for="current-password">Current password</label>
+              <input type="password" id="current-password" placeholder="Current password">
+            </div>
+            <div class="form-group">
+              <label for="new-password">New password</label>
+              <input type="password" id="new-password" placeholder="New password" required>
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Confirm password</label>
+              <input type="password" id="confirm-password" placeholder="Confirm password" required>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Update</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Account Section -->
+      <section class="section" id="section-account">
+        <h2 class="section-title">Account</h2>
+        <p class="section-desc">Sync your settings across devices and platforms.</p>
+
+        <div class="card account-coming-soon">
+          <div class="coming-soon-badge">Coming soon</div>
+          <div class="coming-soon-features">
+            <div class="coming-soon-item">
+              <svg class="coming-soon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                <polyline points="9 12 12 15 22 3"></polyline>
+              </svg>
+              <div>
+                <p class="coming-soon-title">Sync across devices</p>
+                <p class="coming-soon-text">Your settings and stats on every computer, automatically.</p>
+              </div>
+            </div>
+            <div class="coming-soon-item">
+              <svg class="coming-soon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+              <div>
+                <p class="coming-soon-title">iOS app</p>
+                <p class="coming-soon-text">DoomScrollingFix on your phone. Same intervention, native experience.</p>
+              </div>
+            </div>
+            <div class="coming-soon-item">
+              <svg class="coming-soon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+              <div>
+                <p class="coming-soon-title">Web dashboard</p>
+                <p class="coming-soon-text">See your trends and insights from any browser.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="main-footer">
+        <button id="reset-settings" class="btn-danger">Reset all settings</button>
+        <span class="version">DoomScrollingFix v1.0.0</span>
+      </footer>
     </main>
-
-    <footer class="footer">
-      <p>DoomScrollingFix v1.0.0</p>
-      <button id="reset-settings" class="btn-secondary">Reset All Settings</button>
-    </footer>
   </div>
 
   <div id="toast" class="toast" role="alert" aria-live="polite"></div>
-  
+
   <script src="src/js/options.js" type="module"></script>
 </body>
 </html>
