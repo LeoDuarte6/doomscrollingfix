@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -8,16 +9,11 @@ import Science from "@/components/Science";
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 import ScrollIndicator from "@/components/ScrollIndicator";
+import Privacy from "@/components/Privacy";
 
-function App() {
-  useEffect(() => {
-    if (!document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.add('dark');
-    }
-  }, []);
-
+function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <>
       <ScrollIndicator />
       <Navbar />
       <main className="flex-grow">
@@ -28,8 +24,27 @@ function App() {
         <CtaSection />
       </main>
       <Footer />
-      <Toaster />
-    </div>
+    </>
+  );
+}
+
+function App() {
+  useEffect(() => {
+    if (!document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen flex flex-col bg-background">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/privacy" element={<Privacy />} />
+        </Routes>
+        <Toaster />
+      </div>
+    </BrowserRouter>
   );
 }
 

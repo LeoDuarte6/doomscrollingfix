@@ -50,7 +50,22 @@ const Navbar = () => {
           }
         });
 
-        setActiveSection(bestRatio > 0 ? best : null);
+        if (bestRatio > 0) {
+          setActiveSection(best);
+        } else {
+          // Nothing visible — snap to the closest section
+          const scrollY = window.scrollY + window.innerHeight / 2;
+          let closest = sectionIds[0];
+          let closestDist = Infinity;
+          sectionEls.forEach((el) => {
+            const dist = Math.abs(el.offsetTop - scrollY);
+            if (dist < closestDist) {
+              closestDist = dist;
+              closest = el.id;
+            }
+          });
+          setActiveSection(closest);
+        }
       },
       { threshold: [0, 0.25, 0.5, 0.75, 1], rootMargin: "-80px 0px 0px 0px" }
     );

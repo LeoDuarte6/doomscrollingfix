@@ -29,6 +29,11 @@ async function initialize() {
     // Listen for installation/update
     chrome.runtime.onInstalled.addListener(handleInstall);
 
+    // Open options page when extension icon is clicked
+    chrome.action.onClicked.addListener(() => {
+      chrome.runtime.openOptionsPage();
+    });
+
     console.log('Background service worker initialized');
   } catch (error) {
     console.error('Initialization error:', error);

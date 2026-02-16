@@ -163,7 +163,7 @@ class DoomScrollUI {
       display = document.createElement('div');
       display.id = 'doomscroll-timer';
       display.classList.add('doomscroll-timer');
-      document.body.appendChild(display);
+      document.documentElement.appendChild(display);
     }
     return display;
   }
@@ -217,7 +217,7 @@ class DoomScrollController {
     const breathingStep = this.ui.createBreathingStep();
     const intentionStep = this.ui.createIntentionStep();
 
-    intentionStep.style.display = 'none';
+    intentionStep.classList.add('doomscroll-hidden');
     overlay.appendChild(breathingStep);
     overlay.appendChild(intentionStep);
 
@@ -235,8 +235,8 @@ class DoomScrollController {
     });
 
     setTimeout(() => {
-      breathingStep.style.display = 'none';
-      intentionStep.style.display = 'flex';
+      breathingStep.classList.add('doomscroll-hidden');
+      intentionStep.classList.remove('doomscroll-hidden');
 
       // Set up intention step listeners
       const dismissBtn = intentionStep.querySelector('.doomscroll-button-dismiss');
@@ -253,8 +253,10 @@ class DoomScrollController {
       });
 
       proceedBtn.addEventListener('click', async () => {
+        const intention = input.value.trim();
         this.unlockContent();
         await this.saveUnlockTime();
+        await this.saveIntention(intention);
       });
 
       input.addEventListener('keypress', (e) => {
@@ -303,6 +305,22 @@ class DoomScrollController {
 
     const { interventionCount = 0 } = await chrome.storage.local.get('interventionCount');
     await chrome.storage.local.set({ interventionCount: interventionCount + 1 });
+  }
+
+  async saveIntention(intention) {
+    try {
+      const { intentionLog = [] } = await chrome.storage.local.get('intentionLog');
+      intentionLog.push({
+        domain: this.state.currentDomain,
+        intention: intention || '',
+        timestamp: Date.now()
+      });
+      // Keep last 50 entries to avoid bloating storage
+      const trimmed = intentionLog.slice(-50);
+      await chrome.storage.local.set({ intentionLog: trimmed });
+    } catch (error) {
+      console.error('Error saving intention:', error);
+    }
   }
 
   async handleVisibilityChange() {

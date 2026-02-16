@@ -136,6 +136,7 @@ class UIManager {
     document.getElementById('time-saved').textContent = timeSaved > 0 ? `${timeSaved}m` : '0m';
 
     this.updateBarChart(settings);
+    this.updateIntentionLog(settings);
   }
 
   async updateBarChart(settings) {
@@ -180,6 +181,34 @@ class UIManager {
           </div>
         `;
       }).join('');
+  }
+
+  updateIntentionLog(settings) {
+    const container = document.getElementById('intention-log');
+    const log = settings.intentionLog || [];
+
+    if (log.length === 0) {
+      container.innerHTML = '<p class="bar-empty">No intentions logged yet. They\'ll appear here after your next visit.</p>';
+      return;
+    }
+
+    // Show most recent first, limit to 15
+    const recent = log.slice().reverse().slice(0, 15);
+
+    container.innerHTML = recent.map(entry => {
+      const date = new Date(entry.timestamp);
+      const timeStr = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+        + ' ' + date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+      const intentionText = entry.intention || '<span class="intention-empty">No reason given</span>';
+
+      return `
+        <div class="intention-row">
+          <span class="intention-domain">${entry.domain}</span>
+          <span class="intention-text">${intentionText}</span>
+          <span class="intention-time">${timeStr}</span>
+        </div>
+      `;
+    }).join('');
   }
 
   displayWebsites(domains) {

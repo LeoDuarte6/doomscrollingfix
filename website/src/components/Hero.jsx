@@ -15,8 +15,8 @@ const Hero = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 id="hero-heading" className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white">
-              Stop doomscrolling.{" "}
-              <span className="gradient-text">Start choosing.</span>
+              Your time on Earth is{" "}
+              <span className="gradient-text">limited.</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-400 mb-8 max-w-lg mx-auto lg:mx-0">
               A free Chrome extension that interrupts autopilot scrolling with a

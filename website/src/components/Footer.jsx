@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Github } from "lucide-react";
 
 const Footer = () => {
@@ -17,6 +18,12 @@ const Footer = () => {
             </p>
           </div>
           <div className="flex items-center gap-6">
+            <Link
+              to="/privacy"
+              className="text-sm text-gray-500 hover:text-white transition-colors"
+            >
+              Privacy Policy
+            </Link>
             <a
               href="https://github.com"
               target="_blank"

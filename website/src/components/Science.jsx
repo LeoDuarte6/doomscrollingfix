@@ -8,6 +8,7 @@ const studies = [
     stat: "57%",
     label: "less social media use",
     source: "PNAS (2024)",
+    sourceUrl: "https://doi.org/10.1073/pnas.2213114120",
     description:
       'The "One Sec" study published in the Proceedings of the National Academy of Sciences found that a single moment of friction before opening social media reduced usage by 57%.',
   },
@@ -16,6 +17,7 @@ const studies = [
     stat: "d = 0.65",
     label: "implementation intentions effect",
     source: "Gollwitzer & Sheeran (2006)",
+    sourceUrl: "https://doi.org/10.1016/S0065-2601(06)38002-1",
     description:
       'Asking "what are you looking for?" leverages implementation intentions — specifying when, where, and how you\'ll act on a goal. Meta-analysis of 94 studies confirms a medium-to-large effect size.',
   },
@@ -23,7 +25,8 @@ const studies = [
     icon: <BookOpen className="h-6 w-6 text-red-500" />,
     stat: "Choice > Block",
     label: "friction beats restriction",
-    source: "Digital wellbeing research",
+    source: "Lyngs et al. (2019)",
+    sourceUrl: "https://doi.org/10.1145/3290605.3300361",
     description:
       "Tools that offer a choice outperform hard blocks. Users who feel controlled disengage entirely. DoomScrollingFix gives you a nudge, not a wall — the dismiss option is what makes it stick.",
   },
@@ -62,7 +65,14 @@ const Science = () => {
                   <span className="text-sm text-gray-500">{study.label}</span>
                 </h3>
                 <p className="text-gray-400 mb-2">{study.description}</p>
-                <p className="text-xs text-gray-600">{study.source}</p>
+                <a
+                  href={study.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-red-400 transition-colors underline underline-offset-2 decoration-gray-700 hover:decoration-red-400/50"
+                >
+                  {study.source} ↗
+                </a>
               </div>
             </motion.div>
           ))}

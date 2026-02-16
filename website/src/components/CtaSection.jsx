@@ -19,10 +19,10 @@ const CtaSection = () => {
           <div className="relative z-10 py-16 px-8 md:py-24 md:px-16">
             <div className="max-w-2xl mx-auto text-center">
               <h2 id="cta-heading" className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Stop doomscrolling today
+                Your attention is worth protecting
               </h2>
               <p className="text-lg text-gray-300 mb-8">
-                Take back your attention. No account. No tracking. Just better habits.
+                Free forever. Installs in seconds. No account needed.
               </p>
               <Button className="bg-white text-black hover:bg-gray-200 px-8 py-6 h-auto text-lg font-semibold">
                 <Chrome className="mr-2 h-5 w-5" />
