@@ -125,6 +125,9 @@ class DoomScrollUI {
 
     const overlay = document.createElement('div');
     overlay.id = 'doomscroll-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'DoomScrollingFix intervention');
     return overlay;
   }
 
@@ -172,9 +175,9 @@ class DoomScrollUI {
       <p class="doomscroll-heading">${prompt.heading}</p>
       <p class="doomscroll-subtext">${prompt.subtext}</p>
       <input type="text" class="doomscroll-input" placeholder="e.g. Check a DM, find a recipe..." autocomplete="off">
-      <div class="doomscroll-choice-row">
-        <button class="doomscroll-button doomscroll-button-dismiss">Go back</button>
-        <button class="doomscroll-button doomscroll-button-proceed">Continue to ${this.state.currentDomain}</button>
+      <div class="doomscroll-choice-row" role="group" aria-label="Choose what to do">
+        <button class="doomscroll-button doomscroll-button-dismiss" aria-label="Go back to previous page">Go back</button>
+        <button class="doomscroll-button doomscroll-button-proceed" aria-label="Continue to ${this.state.currentDomain}">Continue to ${this.state.currentDomain}</button>
       </div>
     `;
 
