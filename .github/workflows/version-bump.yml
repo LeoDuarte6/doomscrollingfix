@@ -39,13 +39,15 @@ jobs:
             m.version = '$NEW';
             fs.writeFileSync('manifest.json', JSON.stringify(m, null, 2) + '\n');
           "
+          # Also update version in options.html
+          sed -i "s/v[0-9]*\.[0-9]*\.[0-9]*/v$NEW/g" options.html
           echo "VERSION=$NEW" >> "$GITHUB_ENV"
           echo "Bumped $CURRENT -> $NEW"
       - name: Commit and tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add manifest.json
+          git add manifest.json options.html
           git commit -m "chore: bump version to v$VERSION"
           git tag "v$VERSION"
           git push && git push --tags
