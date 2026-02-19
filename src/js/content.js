@@ -39,6 +39,7 @@ class DoomScrollState {
     this.lastScrollY = window.scrollY;
     this.scrollTimeout = null;
     this.repromptInterval = CONFIG.DEFAULT_REPROMPT_INTERVAL;
+    this.isMusicMode = false;
   }
 
   async loadRepromptInterval() {
@@ -60,7 +61,11 @@ class DoomScrollState {
     this.timerInterval = setInterval(() => {
       this.timeSpent++;
       this.updateTimerDisplay();
-      this.saveTimeSpent();
+      if (this.isMusicMode) {
+        this.saveMusicTime();
+      } else {
+        this.saveTimeSpent();
+      }
     }, 1000);
   }
 
@@ -83,7 +88,11 @@ class DoomScrollState {
       this.timerInterval = setInterval(() => {
         this.timeSpent++;
         this.updateTimerDisplay();
-        this.saveTimeSpent();
+        if (this.isMusicMode) {
+          this.saveMusicTime();
+        } else {
+          this.saveTimeSpent();
+        }
       }, 1000);
     }
   }
@@ -99,6 +108,17 @@ class DoomScrollState {
       await chrome.storage.local.set({ [key]: totalTime });
     } catch (error) {
       console.error('Error saving time spent:', error);
+    }
+  }
+
+  async saveMusicTime() {
+    try {
+      const key = `musicTime_${this.currentDomain}`;
+      const data = await chrome.storage.local.get(key);
+      const totalTime = (data[key] || 0) + 1;
+      await chrome.storage.local.set({ [key]: totalTime });
+    } catch (error) {
+      console.error('Error saving music time:', error);
     }
   }
 
@@ -190,6 +210,12 @@ class DoomScrollUI {
       display = document.createElement('div');
       display.id = 'doomscroll-timer';
       display.classList.add('doomscroll-timer');
+      display.title = 'Click to toggle music mode';
+      display.addEventListener('click', () => {
+        this.state.isMusicMode = !this.state.isMusicMode;
+        display.classList.toggle('doomscroll-timer-music', this.state.isMusicMode);
+        display.title = this.state.isMusicMode ? 'Music mode ON — click to disable' : 'Click to toggle music mode';
+      });
       document.documentElement.appendChild(display);
     }
     return display;
@@ -323,25 +349,6 @@ class DoomScrollController {
             err.textContent = entered === null ? 'Password required to continue.' : 'Wrong password. Try again.';
             return;
           }
-        } else {
-          // No password set — use a math captcha as friction
-          const ops = [
-            () => { const a = Math.floor(Math.random() * 20) + 5; const b = Math.floor(Math.random() * 15) + 1; return { q: `${a} + ${b}`, a: a + b }; },
-            () => { const a = Math.floor(Math.random() * 20) + 15; const b = Math.floor(Math.random() * 10) + 1; return { q: `${a} - ${b}`, a: a - b }; },
-            () => { const a = Math.floor(Math.random() * 8) + 2; const b = Math.floor(Math.random() * 8) + 2; return { q: `${a} × ${b}`, a: a * b }; }
-          ];
-          const { q, a: answer } = ops[Math.floor(Math.random() * ops.length)]();
-          const entered = prompt(`Solve to continue: ${q} = ?`);
-          if (entered === null || parseInt(entered, 10) !== answer) {
-            let err = intentionStep.querySelector('.doomscroll-error');
-            if (!err) {
-              err = document.createElement('p');
-              err.className = 'doomscroll-error';
-              intentionStep.appendChild(err);
-            }
-            err.textContent = entered === null ? 'Solve the problem to continue.' : 'Wrong answer. Try again.';
-            return;
-          }
         }
 
         this.unlockContent();
@@ -430,6 +437,7 @@ class DoomScrollController {
 
   async handleVisibilityChange() {
     if (!this.state.isUnlocked) return;
+    if (this.state.isMusicMode) return;
 
     if (document.hidden) {
       this.state.pauseTimer();
@@ -452,6 +460,7 @@ class DoomScrollController {
 
   handleScroll() {
     if (!this.state.isUnlocked) return;
+    if (this.state.isMusicMode) return;
 
     const currentScrollY = window.scrollY;
     const scrollDelta = Math.abs(currentScrollY - this.state.lastScrollY);
@@ -484,6 +493,7 @@ class DoomScrollController {
     this.repromptCheckInterval = setInterval(async () => {
       try {
         if (!this.state.isUnlocked) return;
+        if (this.state.isMusicMode) return;
 
         const key = `lastUnlock_${this.state.currentDomain}`;
         const { [key]: lastUnlockTime } = await chrome.storage.local.get(key);
@@ -498,6 +508,9 @@ class DoomScrollController {
   }
 
   triggerReprompt(source) {
+    this.state.isMusicMode = false;
+    const timer = document.getElementById('doomscroll-timer');
+    if (timer) timer.classList.remove('doomscroll-timer-music');
     this.state.isUnlocked = false;
     this.state.stopTimer();
     if (this.repromptCheckInterval) {

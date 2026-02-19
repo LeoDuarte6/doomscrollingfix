@@ -180,26 +180,14 @@ class UIManager {
 
   updateStatistics(settings) {
     const interventions = settings.interventionCount || 0;
-    const dismissals = settings.dismissCount || 0;
-    const totalInteractions = interventions + dismissals;
 
-    document.getElementById('total-interventions').textContent = totalInteractions;
+    document.getElementById('total-interventions').textContent = interventions;
 
-    // "Time saved" = dismissals * estimated avg session (15 min) + interventions that shortened sessions (5 min)
-    const timeSaved = (dismissals * 15) + (interventions * 5);
+    const timeSaved = interventions * 5;
     document.getElementById('time-saved').textContent = timeSaved > 0 ? `${timeSaved}m` : '0m';
-
-    // Dismiss rate
-    if (totalInteractions > 0) {
-      const rate = Math.round((dismissals / totalInteractions) * 100);
-      document.getElementById('dismiss-rate').textContent = `${rate}%`;
-    } else {
-      document.getElementById('dismiss-rate').textContent = '--';
-    }
 
     this.updateBarChart(settings);
     this.updateIntentionLog(settings);
-    this.updateTotalTracked(settings);
 
     // Show password status indicator
     const passwordNav = document.querySelector('.nav-item[data-section="password"]');
@@ -214,16 +202,6 @@ class UIManager {
         passwordNav.appendChild(badge);
       }
     }
-  }
-
-  async updateTotalTracked(settings) {
-    let totalSeconds = 0;
-    for (const domain of settings.doomscrollDomains) {
-      const key = `timeSpent_${domain}`;
-      const result = await chrome.storage.local.get(key);
-      totalSeconds += result[key] || 0;
-    }
-    document.getElementById('total-tracked').textContent = formatTime(totalSeconds);
   }
 
   async updateBarChart(settings) {
