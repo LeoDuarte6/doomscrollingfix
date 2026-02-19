@@ -303,6 +303,24 @@ class UIManager {
       return;
     }
 
+    // Request host permission for custom domains not in default list
+    const defaultDomains = DEFAULT_SETTINGS.doomscrollDomains;
+    if (!defaultDomains.includes(domain)) {
+      try {
+        const granted = await chrome.permissions.request({
+          origins: [`*://*.${domain}/*`, `*://${domain}/*`]
+        });
+        if (!granted) {
+          showToast('Permission denied — cannot monitor this site', 'error');
+          return;
+        }
+      } catch (err) {
+        console.error('Permission request error:', err);
+        showToast('Could not request permission', 'error');
+        return;
+      }
+    }
+
     const newDomains = [...settings.doomscrollDomains, domain];
     await SettingsManager.updateSettings({ doomscrollDomains: newDomains });
 
