@@ -86,6 +86,9 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
 
       if (doomscrollDomains.some(d => domain === d || domain.endsWith('.' + d))) {
         await updateBadge(tabId);
+      } else {
+        // Clear badge on non-monitored sites
+        await chrome.action.setBadgeText({ text: '', tabId });
       }
     }
   } catch (error) {
