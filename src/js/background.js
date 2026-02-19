@@ -103,7 +103,7 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
 async function handleAlarm(alarm) {
   try {
     if (alarm.name === ALARM_NAME) {
-      const tabs = await chrome.tabs.query({ active: true });
+      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
       
       for (const tab of tabs) {
         if (tab.url) {

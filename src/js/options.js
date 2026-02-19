@@ -32,6 +32,12 @@ function showToast(message, type = 'success') {
   }, 2500);
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function isValidDomain(domain) {
   const pattern = /^([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/;
   return pattern.test(domain);
@@ -199,11 +205,13 @@ class UIManager {
       const date = new Date(entry.timestamp);
       const timeStr = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         + ' ' + date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-      const intentionText = entry.intention || '<span class="intention-empty">No reason given</span>';
+      const intentionText = entry.intention
+        ? escapeHtml(entry.intention)
+        : '<span class="intention-empty">No reason given</span>';
 
       return `
         <div class="intention-row">
-          <span class="intention-domain">${entry.domain}</span>
+          <span class="intention-domain">${escapeHtml(entry.domain)}</span>
           <span class="intention-text">${intentionText}</span>
           <span class="intention-time">${timeStr}</span>
         </div>
@@ -293,7 +301,7 @@ class UIManager {
   async handleTimerUpdate() {
     const interval = parseInt(document.getElementById('reprompt-interval').value, 10);
 
-    if (interval < 1 || interval > 60) {
+    if (!Number.isFinite(interval) || interval < 1 || interval > 60) {
       showToast('Enter 1-60 minutes', 'error');
       return;
     }

@@ -35,8 +35,10 @@ class DoomScrollState {
   async loadRepromptInterval() {
     try {
       const { repromptInterval } = await chrome.storage.local.get('repromptInterval');
-      if (repromptInterval) {
-        this.repromptInterval = repromptInterval * 60 * 1000;
+      if (repromptInterval && Number.isFinite(repromptInterval) && repromptInterval > 0) {
+        // Clamp to sane range: 1-60 minutes
+        const clamped = Math.max(1, Math.min(60, repromptInterval));
+        this.repromptInterval = clamped * 60 * 1000;
       }
     } catch (error) {
       console.error('Error loading reprompt interval:', error);
@@ -195,6 +197,15 @@ class DoomScrollController {
       this.startRepromptCheck();
 
       document.addEventListener('visibilitychange', () => this.handleVisibilityChange());
+
+      // Clean up intervals on page unload to prevent leaks
+      window.addEventListener('beforeunload', () => {
+        this.state.stopTimer();
+        if (this.repromptCheckInterval) {
+          clearInterval(this.repromptCheckInterval);
+          this.repromptCheckInterval = null;
+        }
+      });
     } catch (error) {
       console.error('Initialization error:', error);
     }
