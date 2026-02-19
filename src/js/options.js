@@ -120,6 +120,10 @@ class UIManager {
       this.handleReset();
     });
 
+    document.getElementById('clear-stats').addEventListener('click', () => {
+      this.handleClearStats();
+    });
+
     document.getElementById('export-settings').addEventListener('click', () => {
       this.handleExport();
     });
@@ -373,6 +377,28 @@ class UIManager {
 
     await SettingsManager.updateSettings({ repromptInterval: interval });
     showToast('Timer saved');
+  }
+
+  async handleClearStats() {
+    if (!confirm('Clear all usage stats? Your settings will be kept.')) return;
+
+    const settings = await SettingsManager.getSettings();
+    const keysToRemove = [];
+
+    for (const domain of settings.doomscrollDomains) {
+      keysToRemove.push(`timeSpent_${domain}`);
+      keysToRemove.push(`lastUnlock_${domain}`);
+    }
+
+    await chrome.storage.local.remove(keysToRemove);
+    await chrome.storage.local.set({
+      interventionCount: 0,
+      dismissCount: 0,
+      intentionLog: []
+    });
+
+    await this.loadSettings();
+    showToast('Stats cleared');
   }
 
   async handleExport() {
