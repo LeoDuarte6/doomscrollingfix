@@ -7,10 +7,6 @@ function normalizeDomain(hostname) {
 }
 
 /**
- * @typedef {import('./options').Settings} Settings
- */
-
-/**
  * Initializes the background service worker
  */
 async function initialize() {
@@ -47,9 +43,9 @@ async function initialize() {
 async function handleInstall(details) {
   try {
     if (details.reason === 'install') {
-      // Set default settings on install
-      const settings = await chrome.storage.local.get(null);
-      if (!settings.password) {
+      // Set default settings on install (only if not already configured)
+      const settings = await chrome.storage.local.get('doomscrollDomains');
+      if (!settings.doomscrollDomains) {
         await chrome.storage.local.set({
           doomscrollDomains: [
             'twitter.com',
