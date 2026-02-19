@@ -314,7 +314,6 @@ class DoomScrollController {
         if (password) {
           const entered = prompt('Enter your DoomScrollingFix password to continue:');
           if (entered !== password) {
-            // Show error inline
             let err = intentionStep.querySelector('.doomscroll-error');
             if (!err) {
               err = document.createElement('p');
@@ -322,6 +321,25 @@ class DoomScrollController {
               intentionStep.appendChild(err);
             }
             err.textContent = entered === null ? 'Password required to continue.' : 'Wrong password. Try again.';
+            return;
+          }
+        } else {
+          // No password set — use a math captcha as friction
+          const ops = [
+            () => { const a = Math.floor(Math.random() * 20) + 5; const b = Math.floor(Math.random() * 15) + 1; return { q: `${a} + ${b}`, a: a + b }; },
+            () => { const a = Math.floor(Math.random() * 20) + 15; const b = Math.floor(Math.random() * 10) + 1; return { q: `${a} - ${b}`, a: a - b }; },
+            () => { const a = Math.floor(Math.random() * 8) + 2; const b = Math.floor(Math.random() * 8) + 2; return { q: `${a} × ${b}`, a: a * b }; }
+          ];
+          const { q, a: answer } = ops[Math.floor(Math.random() * ops.length)]();
+          const entered = prompt(`Solve to continue: ${q} = ?`);
+          if (entered === null || parseInt(entered, 10) !== answer) {
+            let err = intentionStep.querySelector('.doomscroll-error');
+            if (!err) {
+              err = document.createElement('p');
+              err.className = 'doomscroll-error';
+              intentionStep.appendChild(err);
+            }
+            err.textContent = entered === null ? 'Solve the problem to continue.' : 'Wrong answer. Try again.';
             return;
           }
         }
