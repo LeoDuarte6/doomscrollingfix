@@ -1,69 +1,91 @@
 # DoomScrollingFix
 
-A Chrome extension designed to promote mindful browsing by preventing doomscrolling on social media platforms.
+A free Chrome extension that interrupts autopilot scrolling with research-backed friction — a breathing pause, an intention prompt, and a choice. Works on Twitter, Reddit, Instagram, TikTok, YouTube, and Facebook.
+
+**Website:** [doomscrollingfix.com](https://doomscrollingfix.com)
+
+## How it works
+
+When you visit a monitored site, DoomScrollingFix shows:
+
+1. **A 6-second breathing pause** — engages your prefrontal cortex and breaks the scroll reflex
+2. **An intention prompt** — asks "What are you looking for?" (rotating prompts to reduce habituation)
+3. **A choice** — go back or continue. No locks, no guilt
+
+After your set time limit (default: 2 minutes), the cycle repeats — catching the moments you don't catch yourself.
 
 ## Features
 
-- Two-factor authentication for accessing social media sites (captcha + password)
-- Greyscale mode to reduce visual stimulation
-- Time tracking for social media usage
-- Periodic re-authentication to maintain mindfulness (timer + scroll-triggered)
-- Customizable settings (password, monitored sites, reprompt interval)
+- **Multi-platform:** works on Twitter/X, Reddit, Instagram, TikTok, YouTube, Facebook, and any custom domain you add
+- **Scroll-aware:** detects when you've been scrolling past your time limit and re-prompts
+- **Greyscale mode:** makes content less stimulating after you continue
+- **Privacy-first:** no account, no cloud sync, no analytics — everything stays on your device
+- **Password protection:** optional password gate for extra friction
+- **Dashboard:** usage stats, time per site, intention history
+- **Keyboard accessible:** ESC to dismiss, Enter to proceed
+
+## The science
+
+| Finding | Source |
+|---------|--------|
+| A single moment of friction reduced social media use by **57%** | [PNAS, 2024](https://doi.org/10.1073/pnas.2213114120) |
+| Implementation intentions have a **d = 0.65** effect size | [Gollwitzer & Sheeran, 2006](https://doi.org/10.1016/S0065-2601(06)38002-1) |
+| Choice-based tools outperform hard blocks | [Lyngs et al., 2019](https://doi.org/10.1145/3290605.3300361) |
 
 ## Installation
 
-1. Clone this repository or download the ZIP file
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" in the top right
-4. Click "Load unpacked" and select the extension directory
+### From source (developer mode)
+1. Clone this repository
+2. Open Chrome → `chrome://extensions/`
+3. Enable "Developer mode"
+4. Click "Load unpacked" and select the repo root
 
-## Usage
+### From Chrome Web Store
+Coming soon.
 
-1. After installation, the extension will automatically monitor specified social media sites
-2. When visiting a monitored site:
-   - Solve a simple math captcha
-   - Enter your password
-   - Site content will be displayed in greyscale
-3. After the reprompt interval (default 2 minutes) or significant scrolling, you'll be re-prompted
-4. Access options by right-clicking the extension icon and selecting "Options"
-
-## Configuration
-
-In the options page, you can:
-- Set your access password
-- Customize the list of monitored websites
-- Adjust re-authentication timing (1-60 minutes)
-- View usage statistics
-
-## Project Structure
+## Project structure
 
 ```
 DoomScrollingFix/
 ├── src/
 │   ├── js/
-│   │   ├── content.js      # Content script (overlay, captcha, reprompting)
-│   │   ├── background.js   # Service worker (alarms, badge, install handler)
-│   │   └── options.js      # Options page logic
+│   │   ├── content.js      # Content script (overlay, breathing, intention prompt)
+│   │   ├── background.js   # Service worker (alarms, badge, install handler, dynamic scripts)
+│   │   └── options.js       # Options page logic
 │   └── css/
 │       ├── styles.css       # Content script styles (overlay, timer, greyscale)
 │       └── options.css      # Options page styles
-├── assets/                  # Extension images
-├── manifest.json            # Extension manifest (MV3)
-├── options.html             # Options page
-├── logo.png                 # Extension icon
-├── LICENSE                  # MIT License
+├── icons/                   # Extension icons (16, 32, 48, 128)
+├── website/                 # Marketing website (React + Vite + Tailwind)
+├── scripts/                 # Build & test scripts
+├── manifest.json            # Chrome extension manifest (MV3)
+├── options.html             # Settings dashboard
+├── build-extension.sh       # Build script for extension.zip
+├── STORE_LISTING.md         # Chrome Web Store listing copy
 └── README.md
 ```
 
-## Supported Sites (default)
+## Configuration
 
-- YouTube
-- Twitter / X
-- Facebook
-- Instagram
-- Reddit
-- TikTok
+In the options dashboard:
+- **Websites:** add/remove monitored domains
+- **Timer:** set re-prompt interval (1–60 minutes)
+- **Password:** optional password for extra friction
+- **Dashboard:** view intervention count, time per site, intention history
+
+## Development
+
+```bash
+# Run smoke test (validates manifest references)
+node scripts/smoke-test.js
+
+# Build extension zip
+bash build-extension.sh
+
+# Build website
+cd website && npm install && npm run build
+```
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE).
