@@ -186,6 +186,20 @@ class UIManager {
     this.updateBarChart(settings);
     this.updateIntentionLog(settings);
     this.updateTotalTracked(settings);
+
+    // Show password status indicator
+    const passwordNav = document.querySelector('.nav-item[data-section="password"]');
+    if (passwordNav) {
+      const existing = passwordNav.querySelector('.password-badge');
+      if (existing) existing.remove();
+      if (settings.password) {
+        const badge = document.createElement('span');
+        badge.className = 'password-badge';
+        badge.textContent = '●';
+        badge.title = 'Password is set';
+        passwordNav.appendChild(badge);
+      }
+    }
   }
 
   async updateTotalTracked(settings) {

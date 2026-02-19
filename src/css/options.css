@@ -128,6 +128,12 @@ body {
   transition: color 0.15s ease;
 }
 
+.password-badge {
+  font-size: 0.5rem;
+  color: var(--success);
+  margin-left: auto;
+}
+
 .nav-item:hover .nav-icon {
   color: var(--text-secondary);
 }
