@@ -80,6 +80,8 @@ jobs:
             if (m.manifest_version !== 3) { console.error('Expected MV3'); process.exit(1); }
             console.log('Manifest OK:', m.name, 'v' + m.version);
           "
+      - name: Smoke test — verify all referenced files exist
+        run: node scripts/smoke-test.js
 
   dependency-audit:
     name: Dependency Audit
