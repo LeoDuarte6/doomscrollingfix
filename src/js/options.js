@@ -385,6 +385,19 @@ class UIManager {
     const newDomains = settings.doomscrollDomains.filter(d => d !== domain);
 
     await SettingsManager.updateSettings({ doomscrollDomains: newDomains });
+
+    // Revoke permission for custom domains
+    const defaultDomains = DEFAULT_SETTINGS.doomscrollDomains;
+    if (!defaultDomains.includes(domain)) {
+      try {
+        await chrome.permissions.remove({
+          origins: [`*://*.${domain}/*`, `*://${domain}/*`]
+        });
+      } catch {
+        // Non-critical — permission may already be revoked
+      }
+    }
+
     this.displayWebsites(newDomains);
     showToast('Website removed');
   }
