@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Privacy = () => {
+  useEffect(() => {
+    document.title = "Privacy Policy — DoomScrollingFix";
+    return () => {
+      document.title = "DoomScrollingFix — How to Stop Doomscrolling | Free Chrome Extension";
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-background text-white">
       <div className="max-w-2xl mx-auto px-6 py-20">
