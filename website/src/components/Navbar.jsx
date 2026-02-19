@@ -133,7 +133,7 @@ const Navbar = () => {
             <div className="pl-6">
               <Button
                 className="bg-white text-black hover:bg-gray-200 text-sm font-semibold"
-                onClick={() => window.open("https://chromewebstore.google.com/", "_blank", "noopener")}
+                onClick={() => window.open("https://chromewebstore.google.com/", "_blank", "noopener,noreferrer")}
                 aria-label="Add DoomScrollingFix to Chrome"
               >
                 <Chrome className="mr-1.5 h-4 w-4" />
@@ -190,7 +190,7 @@ const Navbar = () => {
               ))}
               <Button
                 className="w-full mt-2 bg-white text-black hover:bg-gray-200 font-semibold"
-                onClick={() => { setIsMobileMenuOpen(false); window.open("https://chromewebstore.google.com/", "_blank", "noopener"); }}
+                onClick={() => { setIsMobileMenuOpen(false); window.open("https://chromewebstore.google.com/", "_blank", "noopener,noreferrer"); }}
                 aria-label="Add DoomScrollingFix to Chrome"
               >
                 <Chrome className="mr-1.5 h-4 w-4" />

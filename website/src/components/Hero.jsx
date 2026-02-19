@@ -25,7 +25,7 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button
                 className="bg-white text-black hover:bg-gray-200 px-8 py-6 h-auto text-lg font-semibold"
-                onClick={() => window.open("https://chromewebstore.google.com/", "_blank", "noopener")}
+                onClick={() => window.open("https://chromewebstore.google.com/", "_blank", "noopener,noreferrer")}
                 aria-label="Add DoomScrollingFix to Chrome for free"
               >
                 <Chrome className="mr-2 h-5 w-5" />

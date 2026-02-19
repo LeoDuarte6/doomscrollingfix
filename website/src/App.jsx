@@ -10,6 +10,7 @@ import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import Privacy from "@/components/Privacy";
+import NotFound from "@/components/NotFound";
 
 function HomePage() {
   return (
@@ -44,6 +45,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
       </div>
