@@ -324,14 +324,21 @@ class DoomScrollController {
         }
       });
 
-      // ESC key dismisses (goes back)
+      // ESC key dismisses (goes back) — remove listener on use to prevent accumulation
       const handleKeydown = (e) => {
         if (e.key === 'Escape') {
           e.preventDefault();
+          document.removeEventListener('keydown', handleKeydown);
           dismissBtn.click();
         }
       };
       document.addEventListener('keydown', handleKeydown);
+
+      // Also clean up keydown listener when proceeding
+      const origProceedClick = proceedBtn.onclick;
+      proceedBtn.addEventListener('click', () => {
+        document.removeEventListener('keydown', handleKeydown);
+      }, { once: true });
 
       setTimeout(() => input.focus(), 100);
     }, CONFIG.BREATHING_DURATION);
