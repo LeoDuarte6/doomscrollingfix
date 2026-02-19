@@ -1,0 +1,18 @@
+{
+  "name": "doomscrollingfix",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DoomScrollingFix — Chrome extension + marketing website",
+  "scripts": {
+    "dev:website": "cd website && npm run dev",
+    "build:website": "cd website && npm run build",
+    "build:extension": "bash build-extension.sh",
+    "smoke-test": "node scripts/smoke-test.js",
+    "lint:website": "cd website && npx eslint src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LeoDuarte6/doomscrollingfix.git"
+  },
+  "license": "MIT"
+}
