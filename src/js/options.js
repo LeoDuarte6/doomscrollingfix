@@ -77,6 +77,20 @@ class SidebarManager {
         const sectionId = item.dataset.section;
         this.switchTo(sectionId);
       });
+
+      // Keyboard support
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const sectionId = item.dataset.section;
+          this.switchTo(sectionId);
+        }
+      });
+
+      // Make focusable
+      if (!item.hasAttribute('tabindex')) {
+        item.setAttribute('tabindex', '0');
+      }
     });
   }
 
