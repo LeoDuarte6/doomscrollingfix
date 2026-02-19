@@ -163,5 +163,55 @@ async function updateBadge(tabId) {
   }
 }
 
+/**
+ * Registers dynamic content scripts for user-added custom domains.
+ * Default domains are handled by the static content_scripts in manifest.json.
+ */
+async function registerCustomDomainScripts() {
+  try {
+    const DEFAULT_DOMAINS = [
+      'twitter.com', 'x.com', 'facebook.com',
+      'instagram.com', 'reddit.com', 'tiktok.com', 'youtube.com'
+    ];
+
+    const { doomscrollDomains = [] } = await chrome.storage.local.get('doomscrollDomains');
+    const customDomains = doomscrollDomains.filter(d => !DEFAULT_DOMAINS.includes(d));
+
+    // Unregister old custom scripts
+    try {
+      await chrome.scripting.unregisterContentScripts({ ids: ['doomscroll-custom'] });
+    } catch {
+      // May not exist yet, that's fine
+    }
+
+    if (customDomains.length === 0) return;
+
+    const matches = customDomains.flatMap(d => [
+      `*://*.${d}/*`,
+      `*://${d}/*`
+    ]);
+
+    await chrome.scripting.registerContentScripts([{
+      id: 'doomscroll-custom',
+      matches,
+      js: ['src/js/content.js'],
+      css: ['src/css/styles.css'],
+      runAt: 'document_start'
+    }]);
+
+    console.log('Registered custom domain scripts for:', customDomains);
+  } catch (error) {
+    console.error('Error registering custom domain scripts:', error);
+  }
+}
+
+// Re-register when domains change
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.doomscrollDomains) {
+    registerCustomDomainScripts();
+  }
+});
+
 // Initialize the service worker
-initialize(); 
+initialize();
+registerCustomDomainScripts(); 
