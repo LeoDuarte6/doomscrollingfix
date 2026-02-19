@@ -8,6 +8,21 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
+# --list flag: show what would be included
+if [ "${1:-}" = "--list" ]; then
+  echo "Files that would be included in extension.zip:"
+  for item in manifest.json logo.png options.html src/ assets/ icons/ LICENSE README.md; do
+    if [ -d "$item" ]; then
+      find "$item" -type f 2>/dev/null | sort
+    elif [ -f "$item" ]; then
+      echo "$item"
+    else
+      echo "  [missing] $item"
+    fi
+  done
+  exit 0
+fi
+
 rm -f extension.zip
 
 FILES=(
