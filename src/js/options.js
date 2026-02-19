@@ -261,6 +261,8 @@ class UIManager {
       return;
     }
 
+    // TODO: Passwords are stored in plaintext in chrome.storage.local.
+    // Consider hashing (e.g. SHA-256 via SubtleCrypto) before storing.
     await SettingsManager.updateSettings({ password: newPassword });
     showToast('Password updated');
     document.getElementById('password-form').reset();

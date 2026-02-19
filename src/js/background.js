@@ -81,7 +81,7 @@ async function handleInstall(details) {
  */
 async function handleTabUpdate(tabId, changeInfo, tab) {
   try {
-    if (changeInfo.status === 'complete' && tab.url) {
+    if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
       const url = new URL(tab.url);
       const domain = normalizeDomain(url.hostname);
 
@@ -106,7 +106,7 @@ async function handleAlarm(alarm) {
       const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
       
       for (const tab of tabs) {
-        if (tab.url) {
+        if (tab.url && tab.url.startsWith('http')) {
           await checkTab(tab);
         }
       }
