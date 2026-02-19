@@ -174,6 +174,14 @@ class UIManager {
     const timeSaved = (dismissals * 15) + (interventions * 5);
     document.getElementById('time-saved').textContent = timeSaved > 0 ? `${timeSaved}m` : '0m';
 
+    // Dismiss rate
+    if (totalInteractions > 0) {
+      const rate = Math.round((dismissals / totalInteractions) * 100);
+      document.getElementById('dismiss-rate').textContent = `${rate}%`;
+    } else {
+      document.getElementById('dismiss-rate').textContent = '--';
+    }
+
     this.updateBarChart(settings);
     this.updateIntentionLog(settings);
     this.updateTotalTracked(settings);
