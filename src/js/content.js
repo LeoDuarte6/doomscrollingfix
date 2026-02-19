@@ -1,3 +1,12 @@
+// Rotating prompts to reduce habituation
+const INTENTION_PROMPTS = [
+  { heading: 'What are you looking for?', subtext: 'Be specific. If you can\'t name it, you probably don\'t need it.' },
+  { heading: 'Why are you here right now?', subtext: 'Name one thing. If nothing comes to mind, that\'s your answer.' },
+  { heading: 'What will you do after this?', subtext: 'Having an exit plan makes it easier to leave.' },
+  { heading: 'Is this what you want to be doing?', subtext: 'You opened this app for a reason — or maybe you didn\'t.' },
+  { heading: 'What would be a better use of this time?', subtext: 'Not guilt — just a question worth asking.' },
+];
+
 // Constants
 const CONFIG = {
   DEFAULT_REPROMPT_INTERVAL: 2 * 60 * 1000,
@@ -140,6 +149,8 @@ class DoomScrollUI {
     const container = document.createElement('div');
     container.className = 'doomscroll-card';
 
+    const prompt = INTENTION_PROMPTS[Math.floor(Math.random() * INTENTION_PROMPTS.length)];
+
     container.innerHTML = `
       <div class="doomscroll-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -147,8 +158,8 @@ class DoomScrollUI {
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </div>
-      <p class="doomscroll-heading">What are you looking for?</p>
-      <p class="doomscroll-subtext">Be specific. If you can't name it, you probably don't need it.</p>
+      <p class="doomscroll-heading">${prompt.heading}</p>
+      <p class="doomscroll-subtext">${prompt.subtext}</p>
       <input type="text" class="doomscroll-input" placeholder="e.g. Check a DM, find a recipe..." autocomplete="off">
       <div class="doomscroll-choice-row">
         <button class="doomscroll-button doomscroll-button-dismiss">Go back</button>
