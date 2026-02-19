@@ -24,7 +24,11 @@ const CtaSection = () => {
               <p className="text-lg text-gray-300 mb-8">
                 Free forever. Installs in seconds. No account needed.
               </p>
-              <Button className="bg-white text-black hover:bg-gray-200 px-8 py-6 h-auto text-lg font-semibold">
+              <Button
+                className="bg-white text-black hover:bg-gray-200 px-8 py-6 h-auto text-lg font-semibold"
+                onClick={() => window.open("https://chromewebstore.google.com/", "_blank", "noopener")}
+                aria-label="Add DoomScrollingFix to Chrome for free"
+              >
                 <Chrome className="mr-2 h-5 w-5" />
                 Add to Chrome — Free
               </Button>

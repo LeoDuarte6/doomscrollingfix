@@ -25,7 +25,7 @@ const Footer = () => {
               Privacy Policy
             </Link>
             <a
-              href="https://github.com"
+              href="https://github.com/LeoDuarte6/doomscrollingfix"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="DoomScrollingFix on GitHub"
