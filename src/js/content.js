@@ -447,6 +447,10 @@ class DoomScrollController {
   triggerReprompt(source) {
     this.state.isUnlocked = false;
     this.state.stopTimer();
+    if (this.repromptCheckInterval) {
+      clearInterval(this.repromptCheckInterval);
+      this.repromptCheckInterval = null;
+    }
     this.setupOverlay();
   }
 }
