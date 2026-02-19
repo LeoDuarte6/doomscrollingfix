@@ -37,7 +37,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white/[0.06] pt-6">
-          <p className="text-xs text-gray-600 text-center">
+          <p className="text-xs text-gray-500 text-center">
             &copy; {new Date().getFullYear()} DoomScrollingFix. Created by{" "}
             <a
               href="https://buffalowebproducts.com"

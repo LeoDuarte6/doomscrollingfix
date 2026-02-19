@@ -100,7 +100,7 @@ const Navbar = () => {
           </a>
 
           {/* Desktop */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav aria-label="Main navigation" className="hidden md:flex items-center space-x-1">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.sectionId}
