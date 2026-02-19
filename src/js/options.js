@@ -171,6 +171,17 @@ class UIManager {
 
     this.updateBarChart(settings);
     this.updateIntentionLog(settings);
+    this.updateTotalTracked(settings);
+  }
+
+  async updateTotalTracked(settings) {
+    let totalSeconds = 0;
+    for (const domain of settings.doomscrollDomains) {
+      const key = `timeSpent_${domain}`;
+      const result = await chrome.storage.local.get(key);
+      totalSeconds += result[key] || 0;
+    }
+    document.getElementById('total-tracked').textContent = formatTime(totalSeconds);
   }
 
   async updateBarChart(settings) {
