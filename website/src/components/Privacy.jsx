@@ -96,10 +96,16 @@ const Privacy = () => {
                 extension badge with time-spent information.
               </li>
               <li>
+                <strong className="text-gray-200">scripting</strong> — To
+                dynamically register content scripts for custom domains you add
+                beyond the defaults.
+              </li>
+              <li>
                 <strong className="text-gray-200">host_permissions</strong> — Scoped
                 to specific domains (Twitter, Reddit, Instagram, TikTok, YouTube,
                 Facebook) so the content script can inject the intervention
-                overlay on those sites only.
+                overlay on those sites only. Additional domains you add are
+                covered by optional permissions granted on demand.
               </li>
             </ul>
           </section>
