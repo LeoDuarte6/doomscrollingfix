@@ -237,11 +237,19 @@ class DoomScrollController {
   }
 
   async checkIfDoomscrollSite() {
-    const { doomscrollDomains } = await chrome.storage.local.get('doomscrollDomains');
-    const domains = doomscrollDomains || CONFIG.DEFAULT_DOMAINS;
-    return domains.some(domain =>
-      this.state.currentDomain === domain || this.state.currentDomain.endsWith('.' + domain)
-    );
+    try {
+      const { doomscrollDomains } = await chrome.storage.local.get('doomscrollDomains');
+      const domains = Array.isArray(doomscrollDomains) ? doomscrollDomains : CONFIG.DEFAULT_DOMAINS;
+      return domains.some(domain =>
+        this.state.currentDomain === domain || this.state.currentDomain.endsWith('.' + domain)
+      );
+    } catch (error) {
+      console.error('Error checking doomscroll site:', error);
+      // Fall back to default domains on storage error
+      return CONFIG.DEFAULT_DOMAINS.some(domain =>
+        this.state.currentDomain === domain || this.state.currentDomain.endsWith('.' + domain)
+      );
+    }
   }
 
   async checkIfShouldShowOverlay() {
