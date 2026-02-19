@@ -1,11 +1,4 @@
 // Constants
-const STORAGE_KEYS = {
-  PASSWORD: 'password',
-  DOMAINS: 'doomscrollDomains',
-  REPROMPT_INTERVAL: 'repromptInterval',
-  INTERVENTION_COUNT: 'interventionCount'
-};
-
 const DEFAULT_SETTINGS = {
   password: '',
   doomscrollDomains: [
@@ -231,7 +224,7 @@ class UIManager {
         const pct = Math.round((d.time / maxTime) * 100);
         return `
           <div class="bar-row">
-            <span class="bar-label">${d.domain}</span>
+            <span class="bar-label">${escapeHtml(d.domain)}</span>
             <div class="bar-track">
               <div class="bar-fill" style="width: ${pct}%"></div>
             </div>
@@ -279,8 +272,8 @@ class UIManager {
       const item = document.createElement('div');
       item.className = 'website-item';
       item.innerHTML = `
-        <span>${domain}</span>
-        <button type="button" data-domain="${domain}">Remove</button>
+        <span>${escapeHtml(domain)}</span>
+        <button type="button" data-domain="${escapeHtml(domain)}">Remove</button>
       `;
 
       item.querySelector('button').addEventListener('click', () => {
