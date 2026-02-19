@@ -130,12 +130,20 @@ class DoomScrollUI {
     const container = document.createElement('div');
     container.className = 'doomscroll-card';
 
+    const breathingMessages = [
+      { heading: 'Take a moment', subtext: 'Breathe in... and out.' },
+      { heading: 'Pause', subtext: 'Six seconds. That\'s all it takes.' },
+      { heading: 'Slow down', subtext: 'Your feed will still be there.' },
+      { heading: 'One breath', subtext: 'Let your nervous system catch up.' },
+    ];
+    const msg = breathingMessages[Math.floor(Math.random() * breathingMessages.length)];
+
     container.innerHTML = `
       <div class="doomscroll-breathing-ring">
         <div class="doomscroll-breathing-circle"></div>
       </div>
-      <p class="doomscroll-heading">Take a moment</p>
-      <p class="doomscroll-subtext">Breathe in... and out.</p>
+      <p class="doomscroll-heading">${msg.heading}</p>
+      <p class="doomscroll-subtext">${msg.subtext}</p>
       <div class="doomscroll-progress-bar">
         <div class="doomscroll-progress-fill"></div>
       </div>
