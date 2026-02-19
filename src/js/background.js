@@ -87,7 +87,7 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
 
       const { doomscrollDomains = [] } = await chrome.storage.local.get('doomscrollDomains');
 
-      if (doomscrollDomains.some(d => domain.includes(d))) {
+      if (doomscrollDomains.some(d => domain === d || domain.endsWith('.' + d))) {
         await updateBadge(tabId);
       }
     }
@@ -127,7 +127,7 @@ async function checkTab(tab) {
 
     const { doomscrollDomains = [] } = await chrome.storage.local.get('doomscrollDomains');
 
-    if (doomscrollDomains.some(d => domain.includes(d))) {
+    if (doomscrollDomains.some(d => domain === d || domain.endsWith('.' + d))) {
       await updateBadge(tab.id);
 
       // Get time spent on this domain

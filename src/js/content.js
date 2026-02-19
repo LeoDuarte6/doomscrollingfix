@@ -203,7 +203,9 @@ class DoomScrollController {
   async checkIfDoomscrollSite() {
     const { doomscrollDomains } = await chrome.storage.local.get('doomscrollDomains');
     const domains = doomscrollDomains || CONFIG.DEFAULT_DOMAINS;
-    return domains.some(domain => this.state.currentDomain.includes(domain));
+    return domains.some(domain =>
+      this.state.currentDomain === domain || this.state.currentDomain.endsWith('.' + domain)
+    );
   }
 
   async checkIfShouldShowOverlay() {
@@ -248,7 +250,9 @@ class DoomScrollController {
         if (window.history.length > 1) {
           window.history.back();
         } else {
-          window.close();
+          // window.close() doesn't work in content scripts unless tab was script-opened.
+          // Redirect to a neutral page instead.
+          window.location.href = 'about:blank';
         }
       });
 
