@@ -329,6 +329,27 @@
   50% { opacity: 0.3; }
 }
 
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #doomscroll-overlay .doomscroll-breathing-circle {
+    animation: none !important;
+  }
+
+  .doomscroll-timer::before {
+    animation: none !important;
+  }
+
+  #doomscroll-overlay .doomscroll-card {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .doomscroll-timer {
+    animation: none !important;
+  }
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   #doomscroll-overlay .doomscroll-card {
