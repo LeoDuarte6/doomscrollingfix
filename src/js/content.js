@@ -321,6 +321,15 @@ class DoomScrollController {
         }
       });
 
+      // ESC key dismisses (goes back)
+      const handleKeydown = (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          dismissBtn.click();
+        }
+      };
+      document.addEventListener('keydown', handleKeydown);
+
       setTimeout(() => input.focus(), 100);
     }, CONFIG.BREATHING_DURATION);
   }
