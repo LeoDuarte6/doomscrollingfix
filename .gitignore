@@ -23,3 +23,6 @@ dist/
 
 # Extension build artifact
 extension.zip
+
+# OpenClaw local state (config has secrets, only commit workspace templates)
+.openclaw/gateway.json5

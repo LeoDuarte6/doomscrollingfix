@@ -1,0 +1,114 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  release:
+    types: [published]
+  schedule:
+    # Weekly dependency audit - Sundays at 8am UTC
+    - cron: "0 8 * * 0"
+
+permissions:
+  contents: write
+
+jobs:
+  lint-website:
+    name: Lint Website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - run: npm ci
+        working-directory: website
+      - run: npm run lint
+        working-directory: website
+
+  build-extension:
+    name: Build Extension ZIP
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package extension
+        run: bash build-extension.sh
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-${{ github.sha }}
+          path: extension.zip
+          retention-days: 30
+
+  build-website:
+    name: Build Website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - run: npm ci
+        working-directory: website
+      - run: npm run build
+        working-directory: website
+      - name: Upload website artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-dist-${{ github.sha }}
+          path: website/dist/
+          retention-days: 30
+
+  validate-manifest:
+    name: Validate Manifest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate manifest.json
+        run: |
+          node -e "
+            const m = require('./manifest.json');
+            const required = ['manifest_version', 'name', 'version', 'permissions', 'content_scripts', 'background'];
+            const missing = required.filter(k => !m[k]);
+            if (missing.length) { console.error('Missing keys:', missing); process.exit(1); }
+            if (m.manifest_version !== 3) { console.error('Expected MV3'); process.exit(1); }
+            console.log('Manifest OK:', m.name, 'v' + m.version);
+          "
+
+  dependency-audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - run: npm ci
+        working-directory: website
+      - name: Audit dependencies
+        run: npm audit --omit=dev || true
+        working-directory: website
+
+  release:
+    name: Attach to Release
+    needs: [lint-website, build-extension, build-website, validate-manifest]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download extension artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-${{ github.sha }}
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: extension.zip
