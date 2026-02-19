@@ -116,6 +116,10 @@ class UIManager {
       this.handleTimerUpdate();
     });
 
+    document.getElementById('remove-password').addEventListener('click', () => {
+      this.handleRemovePassword();
+    });
+
     document.getElementById('reset-settings').addEventListener('click', () => {
       this.handleReset();
     });
@@ -314,6 +318,24 @@ class UIManager {
     // Consider hashing (e.g. SHA-256 via SubtleCrypto) before storing.
     await SettingsManager.updateSettings({ password: newPassword });
     showToast('Password updated');
+    document.getElementById('password-form').reset();
+  }
+
+  async handleRemovePassword() {
+    const settings = await SettingsManager.getSettings();
+    if (!settings.password) {
+      showToast('No password is set', 'error');
+      return;
+    }
+
+    const current = document.getElementById('current-password').value;
+    if (settings.password !== current) {
+      showToast('Enter current password first', 'error');
+      return;
+    }
+
+    await SettingsManager.updateSettings({ password: '' });
+    showToast('Password removed');
     document.getElementById('password-form').reset();
   }
 
