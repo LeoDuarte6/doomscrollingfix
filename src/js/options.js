@@ -133,6 +133,26 @@ class UIManager {
     this.displayWebsites(settings.doomscrollDomains);
     document.getElementById('reprompt-interval').value = settings.repromptInterval;
     this.updateStatistics(settings);
+    this.checkOnboarding();
+  }
+
+  async checkOnboarding() {
+    const { showOnboarding } = await chrome.storage.local.get('showOnboarding');
+    const banner = document.getElementById('onboarding-banner');
+    if (!banner) return;
+
+    if (showOnboarding) {
+      banner.style.display = 'block';
+      const dismissBtn = banner.querySelector('.onboarding-dismiss');
+      if (dismissBtn) {
+        dismissBtn.addEventListener('click', async () => {
+          await chrome.storage.local.set({ showOnboarding: false });
+          banner.style.display = 'none';
+        });
+      }
+    } else {
+      banner.style.display = 'none';
+    }
   }
 
   updateStatistics(settings) {

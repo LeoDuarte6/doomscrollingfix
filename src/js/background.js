@@ -65,7 +65,8 @@ async function handleInstall(details) {
         });
       }
 
-      // Open options page for initial setup
+      // Open options page for initial setup with onboarding flag
+      await chrome.storage.local.set({ showOnboarding: true });
       chrome.runtime.openOptionsPage();
     }
   } catch (error) {
