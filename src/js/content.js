@@ -288,6 +288,24 @@ class DoomScrollController {
 
       proceedBtn.addEventListener('click', async () => {
         const intention = input.value.trim();
+
+        // Check if password is required
+        const { password } = await chrome.storage.local.get('password');
+        if (password) {
+          const entered = prompt('Enter your DoomScrollingFix password to continue:');
+          if (entered !== password) {
+            // Show error inline
+            let err = intentionStep.querySelector('.doomscroll-error');
+            if (!err) {
+              err = document.createElement('p');
+              err.className = 'doomscroll-error';
+              intentionStep.appendChild(err);
+            }
+            err.textContent = entered === null ? 'Password required to continue.' : 'Wrong password. Try again.';
+            return;
+          }
+        }
+
         this.unlockContent();
         await this.saveUnlockTime();
         await this.saveIntention(intention);
