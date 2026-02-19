@@ -164,9 +164,14 @@ class UIManager {
   }
 
   updateStatistics(settings) {
-    document.getElementById('total-interventions').textContent = settings.interventionCount;
+    const interventions = settings.interventionCount || 0;
+    const dismissals = settings.dismissCount || 0;
+    const totalInteractions = interventions + dismissals;
 
-    const timeSaved = settings.interventionCount * 5;
+    document.getElementById('total-interventions').textContent = totalInteractions;
+
+    // "Time saved" = dismissals * estimated avg session (15 min) + interventions that shortened sessions (5 min)
+    const timeSaved = (dismissals * 15) + (interventions * 5);
     document.getElementById('time-saved').textContent = timeSaved > 0 ? `${timeSaved}m` : '0m';
 
     this.updateBarChart(settings);

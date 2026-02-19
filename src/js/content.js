@@ -289,7 +289,13 @@ class DoomScrollController {
       const proceedBtn = intentionStep.querySelector('.doomscroll-button-proceed');
       const input = intentionStep.querySelector('.doomscroll-input');
 
-      dismissBtn.addEventListener('click', () => {
+      dismissBtn.addEventListener('click', async () => {
+        // Track that user chose to go back
+        try {
+          const { dismissCount = 0 } = await chrome.storage.local.get('dismissCount');
+          await chrome.storage.local.set({ dismissCount: dismissCount + 1 });
+        } catch { /* non-critical */ }
+
         // Go back — close the tab or navigate away
         if (window.history.length > 1) {
           window.history.back();
