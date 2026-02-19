@@ -88,6 +88,9 @@ class DoomScrollState {
     }
   }
 
+  // Note: slight race condition possible with multiple tabs on same domain.
+  // Acceptable for approximate time tracking; not worth the complexity of
+  // message-passing through the background worker for exact accuracy.
   async saveTimeSpent() {
     try {
       const key = `timeSpent_${this.currentDomain}`;

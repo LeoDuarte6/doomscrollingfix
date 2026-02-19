@@ -102,7 +102,13 @@
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 	</head>
 	<body>
-		<div id="root"></div>
+		<div id="root">
+			<!-- Initial loading skeleton (replaced by React) -->
+			<div style="min-height:100vh;background:#09090b;display:flex;align-items:center;justify-content:center">
+				<div style="width:32px;height:32px;border:2px solid rgba(255,255,255,0.1);border-top-color:rgba(255,255,255,0.4);border-radius:50%;animation:spin 0.8s linear infinite"></div>
+			</div>
+			<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+		</div>
 		<noscript>
 			<div style="max-width:700px;margin:0 auto;padding:40px 20px;font-family:Inter,sans-serif;color:#fff;background:#09090b">
 				<h1>DoomScrollingFix — How to Stop Doomscrolling</h1>
