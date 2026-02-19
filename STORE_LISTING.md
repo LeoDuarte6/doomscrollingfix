@@ -40,6 +40,18 @@ Productivity
 ## Language
 English
 
+## CWS Requirements Checklist
+- [x] Manifest V3
+- [x] Icons: 16x16, 32x32, 48x48, 128x128
+- [x] Short description ≤132 chars
+- [x] Privacy policy URL: https://doomscrollingfix.com/privacy
+- [x] Single purpose: mindful browsing intervention
+- [x] No remote code execution
+- [x] No minified code in submission
+- [ ] Screenshots at 1280x800 or 640x400
+- [ ] Promotional tile: 440x280 (optional)
+- [x] `optional_host_permissions: <all_urls>` — needed for user-added custom domains (justified in description)
+
 ## Screenshots
 <!-- TODO: Create screenshots at 1280x800 or 640x400 -->
 <!-- Needed: -->
