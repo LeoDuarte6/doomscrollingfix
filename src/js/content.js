@@ -335,7 +335,6 @@ class DoomScrollController {
       document.addEventListener('keydown', handleKeydown);
 
       // Also clean up keydown listener when proceeding
-      const origProceedClick = proceedBtn.onclick;
       proceedBtn.addEventListener('click', () => {
         document.removeEventListener('keydown', handleKeydown);
       }, { once: true });
