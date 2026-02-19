@@ -333,8 +333,14 @@ class DoomScrollController {
         this.repromptCheckInterval = null;
       }
     } else {
+      // Check if reprompt interval elapsed while tab was hidden
+      const key = `lastUnlock_${this.state.currentDomain}`;
+      const { [key]: lastUnlockTime } = await chrome.storage.local.get(key);
+      if (lastUnlockTime && (Date.now() - lastUnlockTime) >= this.state.repromptInterval) {
+        this.triggerReprompt('visibility');
+        return;
+      }
       this.state.resumeTimer();
-      await this.saveUnlockTime();
       this.startRepromptCheck();
     }
   }

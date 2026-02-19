@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "DoomScrollingFix",
   "version": "1.0.0",
-  "description": "A mindful browsing extension that helps prevent doomscrolling through website fading and authentication",
+  "description": "Stop doomscrolling with science-backed breathing pauses and intention prompts. Works on Twitter, Instagram, Reddit, TikTok, YouTube, and Facebook.",
   "permissions": [
     "storage",
     "activeTab",
