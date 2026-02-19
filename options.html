@@ -209,7 +209,14 @@
 
       <!-- Footer -->
       <footer class="main-footer">
-        <button id="reset-settings" class="btn-danger">Reset all settings</button>
+        <div class="footer-actions">
+          <button id="export-settings" class="btn-secondary">Export settings</button>
+          <label class="btn-secondary import-label">
+            Import settings
+            <input type="file" id="import-settings" accept=".json" hidden>
+          </label>
+          <button id="reset-settings" class="btn-danger">Reset all settings</button>
+        </div>
         <span class="version">DoomScrollingFix v1.0.0</span>
       </footer>
     </main>

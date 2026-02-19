@@ -565,6 +565,35 @@ input:focus {
   justify-content: space-between;
 }
 
+.footer-actions {
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+}
+
+.btn-secondary {
+  padding: 0.4375rem 0.875rem;
+  background: var(--accent-glow);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text);
+  border-color: var(--border-hover);
+}
+
+.import-label {
+  display: inline-block;
+}
+
 .version {
   font-size: 0.625rem;
   color: var(--text-muted);

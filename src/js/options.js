@@ -126,6 +126,14 @@ class UIManager {
     document.getElementById('reset-settings').addEventListener('click', () => {
       this.handleReset();
     });
+
+    document.getElementById('export-settings').addEventListener('click', () => {
+      this.handleExport();
+    });
+
+    document.getElementById('import-settings').addEventListener('change', (e) => {
+      this.handleImport(e);
+    });
   }
 
   async loadSettings() {
@@ -348,6 +356,48 @@ class UIManager {
 
     await SettingsManager.updateSettings({ repromptInterval: interval });
     showToast('Timer saved');
+  }
+
+  async handleExport() {
+    try {
+      const data = await chrome.storage.local.get(null);
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `doomscrollingfix-settings-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Settings exported');
+    } catch (error) {
+      console.error('Export error:', error);
+      showToast('Export failed', 'error');
+    }
+  }
+
+  async handleImport(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+
+      if (typeof data !== 'object' || data === null || Array.isArray(data)) {
+        showToast('Invalid settings file', 'error');
+        return;
+      }
+
+      await chrome.storage.local.set(data);
+      await this.loadSettings();
+      showToast('Settings imported');
+    } catch (error) {
+      console.error('Import error:', error);
+      showToast('Import failed — invalid file', 'error');
+    }
+
+    // Reset file input so same file can be re-imported
+    event.target.value = '';
   }
 
   async handleReset() {
