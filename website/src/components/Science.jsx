@@ -37,7 +37,7 @@ const Science = () => {
     <section id="science" aria-labelledby="science-heading" className="py-20 bg-[#0F0F0F]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 id="science-heading" className="text-3xl md:text-4xl font-bold mb-4 text-white">
+          <h2 id="science-heading" className="text-3xl md:text-4xl font-bold mb-4 text-white text-glow">
             Built on research, not hype
           </h2>
           <p className="text-lg text-gray-400">
@@ -50,7 +50,7 @@ const Science = () => {
           {studies.map((study, index) => (
             <motion.div
               key={index}
-              className="flex gap-6 p-6 rounded-xl bg-[#111113] border border-white/[0.06]"
+              className="flex gap-6 p-6 rounded-xl glass-card"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}

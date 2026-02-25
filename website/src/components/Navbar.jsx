@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Chrome } from "lucide-react";
+import { Menu, X, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NAV_LINKS = [
@@ -40,7 +40,6 @@ const Navbar = () => {
           visibleSections.set(entry.target.id, entry.intersectionRatio);
         });
 
-        // Pick the section with the highest visibility
         let best = null;
         let bestRatio = 0;
         visibleSections.forEach((ratio, id) => {
@@ -53,7 +52,6 @@ const Navbar = () => {
         if (bestRatio > 0) {
           setActiveSection(best);
         } else {
-          // Nothing visible — snap to the closest section
           const scrollY = window.scrollY + window.innerHeight / 2;
           let closest = sectionIds[0];
           let closestDist = Infinity;
@@ -85,7 +83,7 @@ const Navbar = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? "bg-black/80 backdrop-blur-md border-b border-white/[0.06]"
+          ? "bg-black/60 backdrop-blur-xl border-b border-white/[0.06]"
           : "bg-transparent"
       }`}
     >
@@ -133,11 +131,15 @@ const Navbar = () => {
             <div className="pl-6">
               <Button
                 className="bg-white text-black hover:bg-gray-200 text-sm font-semibold"
-                onClick={() => window.open("https://chromewebstore.google.com/", "_blank", "noopener,noreferrer")}
-                aria-label="Add DoomScrollingFix to Chrome"
+                onClick={() =>
+                  document
+                    .getElementById("get-app")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+                aria-label="Get DoomScrollingFix"
               >
-                <Chrome className="mr-1.5 h-4 w-4" />
-                Add to Chrome
+                <Download className="mr-1.5 h-4 w-4" />
+                Get the App
               </Button>
             </div>
           </nav>
@@ -164,7 +166,7 @@ const Navbar = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="md:hidden bg-black/95 border-b border-white/[0.06]"
+            className="md:hidden bg-black/90 backdrop-blur-xl border-b border-white/[0.06]"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -190,11 +192,16 @@ const Navbar = () => {
               ))}
               <Button
                 className="w-full mt-2 bg-white text-black hover:bg-gray-200 font-semibold"
-                onClick={() => { setIsMobileMenuOpen(false); window.open("https://chromewebstore.google.com/", "_blank", "noopener,noreferrer"); }}
-                aria-label="Add DoomScrollingFix to Chrome"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  document
+                    .getElementById("get-app")
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }}
+                aria-label="Get DoomScrollingFix"
               >
-                <Chrome className="mr-1.5 h-4 w-4" />
-                Add to Chrome
+                <Download className="mr-1.5 h-4 w-4" />
+                Get the App
               </Button>
             </div>
           </motion.div>

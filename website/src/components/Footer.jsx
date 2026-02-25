@@ -13,8 +13,8 @@ const Footer = () => {
               <span className="logo-circle !bg-white"></span>
             </h3>
             <p className="text-sm text-gray-500 max-w-sm">
-              A free Chrome extension to help you scroll less and choose more.
-              All data stays on your device.
+              A free app to help you scroll less and choose more —
+              on iOS and Chrome. All data stays on your device.
             </p>
           </div>
           <div className="flex items-center gap-6">
@@ -50,7 +50,7 @@ const Footer = () => {
             .
           </p>
           <p className="sr-only">
-            DoomScrollingFix: how to stop doomscrolling, doom scrolling blocker, screen time reducer, digital wellbeing Chrome extension. Free doomscrolling fix for Twitter, Reddit, Instagram, TikTok, YouTube.
+            DoomScrollingFix: how to stop doomscrolling, doom scrolling blocker, screen time reducer, digital wellbeing app for iOS and Chrome. Free doomscrolling fix for Twitter, Reddit, Instagram, TikTok, YouTube.
           </p>
         </div>
       </div>
