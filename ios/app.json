@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "DoomScrollingFix",
+    "slug": "doomscrollingfix",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "scheme": "doomscrollingfix",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0a0a"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.buffalowebproducts.doomscrollingfix",
+      "infoPlist": {
+        "UIBackgroundModes": []
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}

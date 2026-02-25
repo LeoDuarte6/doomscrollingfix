@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DoomScrollingFix Icon Generator</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #18181b;
+      color: #fafafa;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+    h1 { margin-bottom: 0; }
+    p.sub { color: #a1a1aa; margin-top: 8px; }
+    .icons { display: flex; gap: 40px; align-items: flex-end; flex-wrap: wrap; justify-content: center; }
+    .icon-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .icon-box canvas {
+      background: repeating-conic-gradient(#27272a 0% 25%, #3f3f46 0% 50%) 0 0 / 16px 16px;
+      border-radius: 8px;
+    }
+    a.download {
+      color: #dc2626;
+      text-decoration: none;
+      font-size: 14px;
+      border: 1px solid #dc2626;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    a.download:hover { background: #dc262620; }
+    .label { font-size: 13px; color: #a1a1aa; }
+    #download-all {
+      margin-top: 16px;
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    #download-all:hover { background: #b91c1c; }
+  </style>
+</head>
+<body>
+  <h1>Icon Generator</h1>
+  <p class="sub">Recording-dot icons for DoomScrollingFix. Click individual links or download all.</p>
+
+  <div class="icons" id="icons"></div>
+  <button id="download-all">Download All PNGs</button>
+
+  <script>
+    const sizes = [16, 32, 48, 128];
+    const container = document.getElementById('icons');
+    const canvases = {};
+
+    function drawIcon(size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      const cx = size / 2;
+      const cy = size / 2;
+      const radius = size * 0.38;
+
+      // For 128px: subtle glow/shadow behind the dot
+      if (size >= 128) {
+        const glowRadius = radius + 6;
+        const glow = ctx.createRadialGradient(cx, cy, radius * 0.8, cx, cy, glowRadius);
+        glow.addColorStop(0, 'rgba(220, 38, 38, 0.3)');
+        glow.addColorStop(1, 'rgba(220, 38, 38, 0)');
+        ctx.beginPath();
+        ctx.arc(cx, cy, glowRadius, 0, Math.PI * 2);
+        ctx.fillStyle = glow;
+        ctx.fill();
+      }
+
+      if (size >= 48) {
+        // Radial gradient with subtle highlight in upper-left quadrant
+        const grad = ctx.createRadialGradient(
+          cx - radius * 0.25, cy - radius * 0.3, radius * 0.05,
+          cx, cy, radius
+        );
+        grad.addColorStop(0, '#ef4444');   // lighter red highlight
+        grad.addColorStop(1, '#dc2626');   // base red
+        ctx.fillStyle = grad;
+      } else {
+        // Small sizes: flat solid fill
+        ctx.fillStyle = '#dc2626';
+      }
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      return canvas;
+    }
+
+    sizes.forEach(size => {
+      const canvas = drawIcon(size);
+      canvases[size] = canvas;
+
+      const box = document.createElement('div');
+      box.className = 'icon-box';
+
+      // Display canvas (scaled up for small ones so you can see them)
+      const displayCanvas = document.createElement('canvas');
+      const displaySize = Math.max(size, 64);
+      displayCanvas.width = displaySize;
+      displayCanvas.height = displaySize;
+      displayCanvas.style.width = displaySize + 'px';
+      displayCanvas.style.height = displaySize + 'px';
+      const dCtx = displayCanvas.getContext('2d');
+      if (size < displaySize) {
+        dCtx.imageSmoothingEnabled = true;
+        dCtx.imageSmoothingQuality = 'high';
+      }
+      dCtx.drawImage(canvas, 0, 0, displaySize, displaySize);
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = `${size} x ${size}`;
+
+      const link = document.createElement('a');
+      link.className = 'download';
+      link.textContent = `icon-${size}.png`;
+      link.download = `icon-${size}.png`;
+      link.href = canvas.toDataURL('image/png');
+
+      box.appendChild(displayCanvas);
+      box.appendChild(label);
+      box.appendChild(link);
+      container.appendChild(box);
+    });
+
+    document.getElementById('download-all').addEventListener('click', () => {
+      sizes.forEach(size => {
+        const link = document.createElement('a');
+        link.download = `icon-${size}.png`;
+        link.href = canvases[size].toDataURL('image/png');
+        link.click();
+      });
+    });
+  </script>
+</body>
+</html>
